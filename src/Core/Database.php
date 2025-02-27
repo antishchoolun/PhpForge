@@ -4,7 +4,6 @@ namespace PhpForge\Core;
 
 use PDO;
 use PDOException;
-use Exception;
 
 class Database
 {
@@ -19,12 +18,24 @@ class Database
     private $config;
 
     /**
-     * @var array Active transactions count
+     * @var bool Whether to throw exceptions on error
      */
-    private $transactionCount = 0;
+    private $throwErrors = true;
 
     /**
-     * Create a new database connection
+     * Debug log helper
+     */
+    private function debug($message, $data = null): void
+    {
+        if (function_exists('debug')) {
+            debug($message, $data);
+        } elseif (isset($_ENV['APP_DEBUG']) && $_ENV['APP_DEBUG']) {
+            error_log($message . ($data ? ': ' . print_r($data, true) : ''));
+        }
+    }
+
+    /**
+     * Create a new Database instance
      */
     public function __construct(array $config)
     {
@@ -38,27 +49,151 @@ class Database
     private function connect(): void
     {
         try {
+            $this->debug('Connecting to database', [
+                'host' => $this->config['host'],
+                'dbname' => $this->config['dbname']
+            ]);
+
             $dsn = sprintf(
-                "mysql:host=%s;dbname=%s;charset=utf8mb4",
+                'mysql:host=%s;dbname=%s;charset=utf8mb4',
                 $this->config['host'],
                 $this->config['dbname']
             );
-
-            $options = [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES => false,
-            ];
 
             $this->connection = new PDO(
                 $dsn,
                 $this->config['username'],
                 $this->config['password'],
-                $options
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                    PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4'
+                ]
             );
+
+            $this->debug('Database connection successful');
         } catch (PDOException $e) {
-            throw new Exception("Database connection failed: " . $e->getMessage());
+            $this->debug('Database connection failed', ['error' => $e->getMessage()]);
+            throw new PDOException('Database connection failed: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Execute a query and return the statement
+     */
+    private function execute(string $query, array $params = []): \PDOStatement
+    {
+        try {
+            $this->debug('Executing query', [
+                'query' => $query,
+                'params' => $params
+            ]);
+
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute($params);
+            return $stmt;
+        } catch (PDOException $e) {
+            $this->debug('Query execution failed', [
+                'error' => $e->getMessage(),
+                'query' => $query,
+                'params' => $params
+            ]);
+
+            if ($this->throwErrors) {
+                throw $e;
+            }
+
+            return false;
+        }
+    }
+
+    /**
+     * Fetch a single row
+     */
+    public function fetch(string $query, array $params = []): ?array
+    {
+        $stmt = $this->execute($query, $params);
+        $result = $stmt ? $stmt->fetch() : null;
+        
+        $this->debug('Fetch result', [
+            'query' => $query,
+            'params' => $params,
+            'result' => $result
+        ]);
+
+        return $result ?: null;
+    }
+
+    /**
+     * Fetch all rows
+     */
+    public function fetchAll(string $query, array $params = []): array
+    {
+        $stmt = $this->execute($query, $params);
+        $results = $stmt ? $stmt->fetchAll() : [];
+        
+        $this->debug('FetchAll result', [
+            'query' => $query,
+            'params' => $params,
+            'count' => count($results)
+        ]);
+
+        return $results;
+    }
+
+    /**
+     * Insert a new row
+     */
+    public function insert(string $table, array $data): ?int
+    {
+        $fields = array_keys($data);
+        $values = array_values($data);
+        $placeholders = str_repeat('?,', count($fields) - 1) . '?';
+
+        $query = sprintf(
+            'INSERT INTO %s (%s) VALUES (%s)',
+            $table,
+            implode(', ', $fields),
+            $placeholders
+        );
+
+        $this->execute($query, $values);
+        return (int) $this->connection->lastInsertId();
+    }
+
+    /**
+     * Update existing rows
+     */
+    public function update(string $table, array $data, string $where, array $params = []): int
+    {
+        $set = [];
+        $values = [];
+
+        foreach ($data as $field => $value) {
+            $set[] = "$field = ?";
+            $values[] = $value;
+        }
+
+        $query = sprintf(
+            'UPDATE %s SET %s WHERE %s',
+            $table,
+            implode(', ', $set),
+            $where
+        );
+
+        $stmt = $this->execute($query, array_merge($values, $params));
+        return $stmt ? $stmt->rowCount() : 0;
+    }
+
+    /**
+     * Delete rows
+     */
+    public function delete(string $table, string $where, array $params = []): int
+    {
+        $query = sprintf('DELETE FROM %s WHERE %s', $table, $where);
+        $stmt = $this->execute($query, $params);
+        return $stmt ? $stmt->rowCount() : 0;
     }
 
     /**
@@ -66,133 +201,38 @@ class Database
      */
     public function beginTransaction(): bool
     {
-        if ($this->transactionCount === 0) {
-            $this->connection->beginTransaction();
-        }
-        $this->transactionCount++;
-        
-        return true;
+        return $this->connection->beginTransaction();
     }
 
     /**
-     * Commit the transaction
+     * Commit a transaction
      */
     public function commit(): bool
     {
-        $this->transactionCount--;
-        
-        if ($this->transactionCount === 0) {
-            return $this->connection->commit();
-        }
-        
-        return true;
+        return $this->connection->commit();
     }
 
     /**
-     * Rollback the transaction
+     * Rollback a transaction
      */
-    public function rollBack(): bool
+    public function rollback(): bool
     {
-        if ($this->transactionCount > 0) {
-            $this->transactionCount = 0;
-            return $this->connection->rollBack();
-        }
-        
-        return false;
+        return $this->connection->rollBack();
     }
 
     /**
-     * Execute a query and return the statement
+     * Set whether to throw errors
      */
-    public function query(string $sql, array $params = []): \PDOStatement
+    public function setThrowErrors(bool $throw): void
     {
-        try {
-            $stmt = $this->connection->prepare($sql);
-            $stmt->execute($params);
-            return $stmt;
-        } catch (PDOException $e) {
-            throw new Exception("Query failed: " . $e->getMessage());
-        }
+        $this->throwErrors = $throw;
     }
 
     /**
-     * Fetch all results from a query
+     * Get the PDO instance
      */
-    public function fetchAll(string $sql, array $params = []): array
-    {
-        return $this->query($sql, $params)->fetchAll();
-    }
-
-    /**
-     * Fetch a single row from a query
-     */
-    public function fetch(string $sql, array $params = []): ?array
-    {
-        $result = $this->query($sql, $params)->fetch();
-        return $result !== false ? $result : null;
-    }
-
-    /**
-     * Insert a row and return the last inserted ID
-     */
-    public function insert(string $table, array $data): int
-    {
-        $columns = implode(', ', array_keys($data));
-        $values = implode(', ', array_fill(0, count($data), '?'));
-        
-        $sql = "INSERT INTO {$table} ({$columns}) VALUES ({$values})";
-        
-        $this->query($sql, array_values($data));
-        return (int) $this->connection->lastInsertId();
-    }
-
-    /**
-     * Update rows in a table
-     */
-    public function update(string $table, array $data, string $where, array $params = []): int
-    {
-        $set = implode(', ', array_map(function ($column) {
-            return "{$column} = ?";
-        }, array_keys($data)));
-        
-        $sql = "UPDATE {$table} SET {$set} WHERE {$where}";
-        
-        $stmt = $this->query($sql, array_merge(array_values($data), $params));
-        return $stmt->rowCount();
-    }
-
-    /**
-     * Delete rows from a table
-     */
-    public function delete(string $table, string $where, array $params = []): int
-    {
-        $sql = "DELETE FROM {$table} WHERE {$where}";
-        
-        $stmt = $this->query($sql, $params);
-        return $stmt->rowCount();
-    }
-
-    /**
-     * Get the database connection
-     */
-    public function getConnection(): PDO
+    public function getPdo(): PDO
     {
         return $this->connection;
-    }
-
-    /**
-     * Quote a value
-     */
-    public function quote($value): string
-    {
-        return $this->connection->quote($value);
-    }
-
-    /**
-     * Get the last insert ID
-     */
-    public function lastInsertId(): string
-    {
-        return $this->connection->lastInsertId();
     }
 }
