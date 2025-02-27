@@ -132,8 +132,9 @@
 .input-control {
     padding: 0.8rem 1rem;
     border-radius: 8px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    background: var(--input-bg, rgba(0, 0, 0, 0.2));
+    color: var(--text-color, #fff);
     font-size: 1rem;
     transition: all 0.2s;
 }
@@ -141,12 +142,66 @@
 .input-control:focus {
     outline: none;
     border-color: var(--primary);
+    background: var(--input-focus-bg, rgba(0, 0, 0, 0.3));
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.input-control::placeholder {
+    color: var(--text-muted, rgba(255, 255, 255, 0.5));
 }
 
 textarea.input-control {
     min-height: 150px;
     resize: vertical;
+}
+
+select.input-control {
+    appearance: none;
+    padding-right: 2.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    background-size: 1.2rem;
+}
+
+select.input-control option {
+    background: var(--card-bg);
+    color: var(--text-color, #fff);
+}
+
+/* Checkbox Styling */
+input[type="checkbox"] {
+    appearance: none;
+    width: 1.2rem;
+    height: 1.2rem;
+    border: 2px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    border-radius: 4px;
+    background: var(--input-bg, rgba(0, 0, 0, 0.2));
+    cursor: pointer;
+    position: relative;
+    margin: 0;
+}
+
+input[type="checkbox"]:checked {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    width: 6px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+input[type="checkbox"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
 }
 
 /* Code Result */
