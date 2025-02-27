@@ -4,83 +4,63 @@
 
 ```
 PhpForge/
-├── public/                 # Public-facing files
-│   ├── index.php          # Main entry point
-│   ├── assets/            # Compiled/public assets
-│   │   ├── css/          # Compiled CSS files
-│   │   ├── js/           # Compiled JavaScript files
-│   │   └── images/       # Image assets
-│   └── .htaccess         # Apache configuration
-├── src/                   # Source files
-│   ├── Config/           # Configuration files
-│   │   ├── Database.php  # Database configuration
-│   │   └── App.php       # Application configuration
-│   ├── Controllers/      # Request handlers
-│   │   ├── AuthController.php
-│   │   ├── ToolController.php
-│   │   └── ApiController.php
-│   ├── Models/           # Database models
-│   │   ├── User.php
-│   │   └── Tool.php
-│   ├── Services/         # Business logic
-│   │   ├── CodeGenerator/
-│   │   ├── Debugging/
-│   │   ├── Security/
-│   │   ├── Performance/
-│   │   ├── Documentation/
-│   │   └── DomainValuation/
-│   ├── Core/             # Framework core
-│   │   ├── Database.php
-│   │   ├── Router.php
-│   │   └── App.php
-│   └── Helpers/          # Utility functions
-├── templates/            # Frontend templates
-│   ├── layout/
-│   │   ├── header.php
-│   │   └── footer.php
-│   └── tools/           # Tool-specific templates
-├── assets/              # Source assets
-│   ├── css/            # CSS source files
-│   ├── js/             # JavaScript source files
-│   └── images/         # Original images
-├── tests/              # Test files
-├── logs/              # Application logs
-├── vendor/            # Composer dependencies
-├── composer.json      # PHP dependencies
-├── composer.lock
-├── .env              # Environment variables
-├── .env.example      # Environment template
+├── app/                  # Application core
+│   ├── Console/         # Artisan commands
+│   ├── Exceptions/      # Custom exceptions
+│   ├── Http/           # HTTP layer
+│   │   ├── Controllers/ # Laravel controllers
+│   │   └── Middleware/ # Custom middleware
+│   └── Models/         # Eloquent models
+├── bootstrap/           # Framework boot files
+├── config/              # Configuration files
+├── database/            # Database migrations/seeds
+├── public/              # Web root (shared hosting)
+│   ├── index.php       # Laravel entry point
+│   ├── assets/         # Compiled assets
+│   └── .htaccess       # Server configuration
+├── resources/          # Frontend resources
+│   ├── views/          # Blade templates
+│   └── js/             # Vanilla JS components
+├── routes/             # Route definitions
+├── storage/            # Storage (logs, cache, etc)
+├── tests/              # PHPUnit tests
+├── vendor/             # Composer dependencies
+├── .env                # Environment variables
+├── .env.example        # Environment template
 ├── .gitignore
-└── README.md         # Project documentation
+├── artisan             # Artisan CLI
+├── composer.json       # PHP dependencies
+└── composer.lock
 ```
 
 ## Architectural Components
 
 ### 1. Frontend Architecture
-- **Pure JavaScript Modules**
-  - `assets/js/tools/` - Individual tool implementations
-  - `assets/js/core/` - Core functionality (API client, utilities)
-  - `assets/js/ui/` - UI components and interactions
+- **JavaScript Components**
+  - `resources/js/tools/` - Individual tool implementations
+  - `resources/js/core/` - Core functionality (API client, utilities)
+  - `resources/js/ui/` - UI components and interactions
 
 - **CSS Structure**
-  - `assets/css/base/` - Reset and base styles
-  - `assets/css/components/` - Reusable components
-  - `assets/css/tools/` - Tool-specific styles
-  - `assets/css/layout/` - Layout and structure
+  - Laravel Mix for CSS compilation
+  - Tailwind CSS utility classes
+  - Component-specific styles in Blade templates
+  - Shared hosting compatible asset pipeline
 
 ### 2. Backend Architecture
-- **Core Framework**
-  - Lightweight routing system
-  - PDO database abstraction
-  - Simple dependency injection
-  - Error handling and logging
+- **Laravel Framework**
+  - Built-in routing system
+  - Eloquent ORM for database
+  - Service container and dependency injection
+  - Blade templating engine
+  - Artisan command-line interface
 
-- **Services Layer**
-  - Individual tool services
-  - Groq API integration
-  - Caching mechanisms
-  - Authentication service
-  - Logging service
+- **Laravel Services**
+  - Service classes in app/Services
+  - Groq API integration via HTTP client
+  - Redis caching integration
+  - Laravel Sanctum for authentication
+  - Laravel Telescope for logging/monitoring
 
 - **Controllers**
   - Request validation
@@ -142,21 +122,21 @@ CREATE TABLE api_requests (
 
 ### 5. Security Measures
 
-- **Input Validation**
-  - Server-side validation for all inputs
-  - Prepared statements for SQL
-  - XSS prevention
-  - CSRF protection
+- **Laravel Security**
+  - Form Request validation
+  - Eloquent ORM parameter binding
+  - Blade template auto-escaping
+  - CSRF tokens with @csrf directive
 
 - **Authentication**
-  - JWT-based authentication
-  - Rate limiting
-  - Session management
+  - Laravel Sanctum API authentication
+  - Laravel rate limiting middleware
+  - Encrypted session driver
 
 - **Data Protection**
-  - Environment-based configuration
-  - Encrypted sensitive data
-  - Secure password hashing
+  - Laravel environment configuration
+  - Encrypted .env values
+  - Bcrypt password hashing
 
 ### 6. Performance Optimization
 
@@ -167,10 +147,10 @@ CREATE TABLE api_requests (
   - Compressed images
 
 - **Backend**
-  - Database query optimization
-  - Response caching
-  - Rate limiting
-  - Resource pooling
+  - Eloquent eager loading
+  - Route caching
+  - Laravel Octane for performance
+  - Queue workers for heavy tasks
 
 ### 7. Deployment Strategy
 
@@ -180,11 +160,11 @@ CREATE TABLE api_requests (
   3. Production deployment
 
 - **Deployment Checklist**
-  - Environment configuration
-  - Database migrations
-  - Asset compilation
-  - Cache clearing
-  - Security checks
+  - Laravel Forge deployment
+  - Database migrations via Artisan
+  - Mix asset compilation
+  - Config and route caching
+  - Security headers middleware
 
 ### 8. Monitoring and Logging
 

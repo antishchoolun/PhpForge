@@ -13,9 +13,10 @@ This document outlines the implementation of an AI-powered tool suite for PhpFor
 
 The project uses shared-hosting compatible technologies for a flexible, maintainable, and modular design:
 
-- **Frontend**: Vanilla JavaScript with modern patterns and minimal dependencies, compatible with all browsers
-- **Backend**: PHP with lightweight frameworks like Slim or CodeIgniter that work on shared hosting
-- **AI Integration**: Groq API for all AI-driven functionalities, using server-side PHP for API calls
+- **Frontend**: Laravel Blade templates with vanilla JavaScript enhancements
+- **Backend**: Laravel framework (v9+) optimized for shared hosting environments
+- **AI Integration**: Groq API integration through Laravel services
+- **Database**: Laravel Eloquent ORM with MySQL/MariaDB
 
 ---
 
@@ -25,10 +26,12 @@ The project uses shared-hosting compatible technologies for a flexible, maintain
   - Pure JavaScript and CSS for compatibility with all hosting environments
   - Client-side rendering with progressive enhancement
   - Modular JavaScript using ES modules where supported, with fallbacks
+  - Refer to home-page-ui.md to understand the template/UI i want to use
 - **Backend**:
-  - PHP (compatible with PHP 7.2+ commonly available on shared hosting)
-  - Micro-framework approach (Slim or CodeIgniter) for routing and basic structure
-  - API integration services for Groq
+  - PHP 8.1+ (Laravel 9+ requirements)
+  - Laravel framework with optimized autoloader
+  - Service classes for Groq API integration
+  - Eloquent ORM for database interactions
 - **Database**:
   - MySQL for storing user data, configurations, and logs (standard on shared hosting)
 - **Logging**:
@@ -188,10 +191,12 @@ The project uses shared-hosting compatible technologies for a flexible, maintain
 
 ## Deployment Considerations
 
-- **Shared Hosting Compatibility**:
-  - All code tested on common shared hosting providers (cPanel, Plesk)
-  - Installation script that checks for required PHP extensions
-  - .htaccess configuration for URL rewriting and security
+- **Laravel Shared Hosting Setup**:
+  - Public directory set to Laravel's public folder
+  - Optimized composer.json for shared hosting constraints
+  - Route caching for performance
+  - Storage directory permissions configured
+  - .htaccess for routing and security hardening
 - **Performance**:
   - Optimized AJAX requests to minimize resource usage
   - Pagination for large datasets to avoid memory limits
