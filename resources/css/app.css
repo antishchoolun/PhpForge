@@ -1,13 +1,11 @@
-/* Import Animate.css */
+/* Import CSS files first */
 @import 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css';
-
-/* Import local CSS modules */
 @import 'base.css';
 @import 'components.css';
 @import 'layout.css';
 @import 'modal.css';
 
-/* Import Tailwind */
+/* Tailwind directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

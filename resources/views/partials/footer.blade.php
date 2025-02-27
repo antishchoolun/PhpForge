@@ -1,6 +1,6 @@
-<footer class="mt-20 py-12 bg-white/50 backdrop-blur-sm border-t border-gray-100">
-    <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+<footer class="bg-gray-50 border-t border-gray-200">
+    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
             <div>
                 <h4 class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">Tools</h4>
                 <ul class="space-y-3">
