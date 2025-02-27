@@ -10,15 +10,15 @@ CREATE TABLE users (
     plan_type ENUM('free', 'pro', 'enterprise') DEFAULT 'free',
     api_key VARCHAR(64) UNIQUE,
     requests_today INT DEFAULT 0,
-    requests_reset_at TIMESTAMP,
+    requests_reset_at TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    last_login_at TIMESTAMP,
+    last_login_at TIMESTAMP NULL,
     is_active BOOLEAN DEFAULT TRUE,
     email_verified BOOLEAN DEFAULT FALSE,
     email_verification_token VARCHAR(64),
     password_reset_token VARCHAR(64),
-    password_reset_expires TIMESTAMP
+    password_reset_expires TIMESTAMP NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- API Keys table
@@ -27,9 +27,9 @@ CREATE TABLE api_keys (
     user_id INT NOT NULL,
     api_key VARCHAR(64) UNIQUE NOT NULL,
     name VARCHAR(100),
-    last_used_at TIMESTAMP,
+    last_used_at TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    expires_at TIMESTAMP,
+    expires_at TIMESTAMP NULL,
     is_active BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -40,10 +40,9 @@ CREATE TABLE tool_usage (
     user_id INT NOT NULL,
     tool_name VARCHAR(50) NOT NULL,
     request_data TEXT,
-    response_data TEXT,
     execution_time FLOAT,
     tokens_used INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,    response_data TEXT,
     status VARCHAR(20),
     error_message TEXT,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
@@ -88,7 +87,7 @@ CREATE TABLE security_scans (
     vulnerabilities_found INT,
     scan_result TEXT,
     started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    completed_at TIMESTAMP,
+    completed_at TIMESTAMP NULL,
     status VARCHAR(20),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (project_id) REFERENCES user_projects(id) ON DELETE SET NULL
@@ -130,7 +129,7 @@ CREATE TABLE domain_valuations (
     valuation_amount DECIMAL(10, 2),
     valuation_factors TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    expires_at TIMESTAMP,
+    expires_at TIMESTAMP NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
