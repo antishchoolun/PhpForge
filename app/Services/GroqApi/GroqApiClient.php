@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Log;
 class GroqApiClient
 {
     protected $apiKey;
-    protected $baseUrl = 'https://api.groq.com/openai/v1/chat';
+    protected $baseUrl = 'https://api.groq.com/openai/v1/chat/completions';
+    protected $model = 'llama-3.3-70b-versatile';
     
     public function __construct()
     {
@@ -24,82 +25,177 @@ class GroqApiClient
         ];
     }
 
-    protected function makeRequest($endpoint, $data, $method = 'POST')
+    public function generateCode($prompt)
     {
-        $cacheKey = 'groq_' . md5($endpoint . json_encode($data));
-        
-        // Check cache first for GET requests
-        if ($method === 'GET' && Cache::has($cacheKey)) {
-            return Cache::get($cacheKey);
-        }
-        
         try {
             $response = Http::withHeaders($this->getHeaders())
                 ->timeout(30)
-                ->$method($this->baseUrl . $endpoint, $data);
+                ->post($this->baseUrl, [
+                    'messages' => [
+                        [
+                            'role' => 'system',
+                            'content' => 'You are a code generation assistant. Generate high-quality, well-documented code based on the requirements provided.'
+                        ],
+                        [
+                            'role' => 'user',
+                            'content' => $prompt
+                        ]
+                    ],
+                    'model' => $this->model,
+                    'temperature' => 0.7,
+                    'max_completion_tokens' => 2000,
+                    'top_p' => 1,
+                    'stream' => false,
+                    'stop' => null
+                ]);
                 
             if ($response->successful()) {
                 $result = $response->json();
-                
-                // Cache successful GET requests
-                if ($method === 'GET') {
-                    Cache::put($cacheKey, $result, now()->addMinutes(60));
-                }
-                
-                return $result;
+                return [
+                    'choices' => [
+                        [
+                            'text' => $result['choices'][0]['message']['content'] ?? ''
+                        ]
+                    ]
+                ];
             }
             
             throw new \Exception('Groq API request failed: ' . $response->body());
         } catch (\Exception $e) {
-            Log::error('Groq API Error: ' . $e->getMessage(), [
-                'endpoint' => $endpoint,
-                'data' => $data
-            ]);
+            Log::error('Groq API Error: ' . $e->getMessage());
             throw $e;
         }
     }
 
-    public function generateCode($prompt)
-    {
-        return $this->makeRequest('/completions', [
-            'prompt' => $prompt,
-            'max_tokens' => 2000,
-            'temperature' => 0.7,
-        ]);
-    }
-
     public function analyzeSecurity($code)
     {
-        return $this->makeRequest('/analyze/security', [
-            'code' => $code,
-        ]);
+        try {
+            $response = Http::withHeaders($this->getHeaders())
+                ->post($this->baseUrl, [
+                    'messages' => [
+                        [
+                            'role' => 'system',
+                            'content' => 'You are a security analysis assistant. Analyze the provided code for security vulnerabilities and best practices.'
+                        ],
+                        [
+                            'role' => 'user',
+                            'content' => "Please analyze this code for security issues:\n\n$code"
+                        ]
+                    ],
+                    'model' => $this->model,
+                    'temperature' => 0.3,
+                    'max_completion_tokens' => 1000
+                ]);
+
+            if ($response->successful()) {
+                return [
+                    'analysis' => $response->json()['choices'][0]['message']['content'] ?? ''
+                ];
+            }
+
+            throw new \Exception('Security analysis failed: ' . $response->body());
+        } catch (\Exception $e) {
+            Log::error('Security Analysis Error: ' . $e->getMessage());
+            throw $e;
+        }
     }
 
     public function debugCode($code)
     {
-        return $this->makeRequest('/analyze/debug', [
-            'code' => $code,
-        ]);
+        try {
+            $response = Http::withHeaders($this->getHeaders())
+                ->post($this->baseUrl, [
+                    'messages' => [
+                        [
+                            'role' => 'system',
+                            'content' => 'You are a code debugging assistant. Analyze the code for potential bugs and improvements.'
+                        ],
+                        [
+                            'role' => 'user',
+                            'content' => "Please debug this code and suggest improvements:\n\n$code"
+                        ]
+                    ],
+                    'model' => $this->model,
+                    'temperature' => 0.3,
+                    'max_completion_tokens' => 1000
+                ]);
+
+            if ($response->successful()) {
+                return [
+                    'analysis' => $response->json()['choices'][0]['message']['content'] ?? ''
+                ];
+            }
+
+            throw new \Exception('Debug analysis failed: ' . $response->body());
+        } catch (\Exception $e) {
+            Log::error('Debug Analysis Error: ' . $e->getMessage());
+            throw $e;
+        }
     }
 
     public function optimizePerformance($code)
     {
-        return $this->makeRequest('/analyze/performance', [
-            'code' => $code,
-        ]);
+        try {
+            $response = Http::withHeaders($this->getHeaders())
+                ->post($this->baseUrl, [
+                    'messages' => [
+                        [
+                            'role' => 'system',
+                            'content' => 'You are a performance optimization assistant. Analyze the code for performance improvements.'
+                        ],
+                        [
+                            'role' => 'user',
+                            'content' => "Please analyze this code for performance optimization:\n\n$code"
+                        ]
+                    ],
+                    'model' => $this->model,
+                    'temperature' => 0.3,
+                    'max_completion_tokens' => 1000
+                ]);
+
+            if ($response->successful()) {
+                return [
+                    'analysis' => $response->json()['choices'][0]['message']['content'] ?? ''
+                ];
+            }
+
+            throw new \Exception('Performance analysis failed: ' . $response->body());
+        } catch (\Exception $e) {
+            Log::error('Performance Analysis Error: ' . $e->getMessage());
+            throw $e;
+        }
     }
 
     public function generateDocumentation($code)
     {
-        return $this->makeRequest('/generate/documentation', [
-            'code' => $code,
-        ]);
-    }
+        try {
+            $response = Http::withHeaders($this->getHeaders())
+                ->post($this->baseUrl, [
+                    'messages' => [
+                        [
+                            'role' => 'system',
+                            'content' => 'You are a documentation generation assistant. Generate comprehensive documentation for the provided code.'
+                        ],
+                        [
+                            'role' => 'user',
+                            'content' => "Please generate documentation for this code:\n\n$code"
+                        ]
+                    ],
+                    'model' => $this->model,
+                    'temperature' => 0.3,
+                    'max_completion_tokens' => 1000
+                ]);
 
-    public function evaluateDomain($domain)
-    {
-        return $this->makeRequest('/evaluate/domain', [
-            'domain' => $domain,
-        ]);
+            if ($response->successful()) {
+                return [
+                    'documentation' => $response->json()['choices'][0]['message']['content'] ?? ''
+                ];
+            }
+
+            throw new \Exception('Documentation generation failed: ' . $response->body());
+        } catch (\Exception $e) {
+            Log::error('Documentation Generation Error: ' . $e->getMessage());
+            throw $e;
+        }
     }
 }

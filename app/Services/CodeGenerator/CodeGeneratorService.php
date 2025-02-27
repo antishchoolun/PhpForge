@@ -41,17 +41,29 @@ class CodeGeneratorService
                 }
             }
 
-            // Construct enhanced prompt
-            $enhancedPrompt = implode("\n", [
-                "Generate {$language} code for the following requirement:",
+            // Construct enhanced prompt with specific instructions
+            $enhancedPrompt = implode("\n\n", [
+                "Please generate {$language} code for the following requirement:",
                 $prompt,
-                "\nRequirements:",
-                ...array_map(fn($req) => "- {$req}", $requirements),
-                "\nProvide clean, maintainable code."
+                "Technical Requirements:",
+                implode("\n", array_map(fn($req) => "- {$req}", $requirements)),
+                "Additional Instructions:",
+                "- Provide only the code without explanations",
+                "- Include comments to explain complex logic",
+                "- Follow standard coding conventions",
+                "- Ensure the code is production-ready"
             ]);
             
             // Get code from Groq API
             $result = $this->groqApi->generateCode($enhancedPrompt);
+
+            // Extract just the code block if it's wrapped in markdown or explanations
+            $code = $result['choices'][0]['text'] ?? '';
+            if (preg_match('/```(?:\w+)?\n(.*?)\n```/s', $code, $matches)) {
+                $code = $matches[1];
+            }
+
+            $result['choices'][0]['text'] = $code;
             
             // Log successful generation
             Log::info('Code generated successfully', [
