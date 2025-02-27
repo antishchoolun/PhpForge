@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 class GroqApiClient
 {
     protected $apiKey;
-    protected $baseUrl = 'https://api.groq.com/v1';
+    protected $baseUrl = 'https://api.groq.com/openai/v1/chat';
     
     public function __construct()
     {

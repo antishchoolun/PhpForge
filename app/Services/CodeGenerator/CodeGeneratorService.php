@@ -15,13 +15,42 @@ class CodeGeneratorService
         $this->groqApi = $groqApi;
     }
     
-    public function generateCode($prompt, $language = 'php')
+    public function generateCode($prompt, $language = 'php', $options = [])
     {
         try {
-            // Enhance prompt with language context
-            $enhancedPrompt = "Generate {$language} code for: {$prompt}\n" .
-                            "Please provide clean, well-documented code following best practices.";
+            // Build language-specific requirements
+            $requirements = $this->getLanguageRequirements($language);
             
+            // Add selected options to requirements
+            foreach ($options as $option) {
+                switch ($option) {
+                    case 'comments':
+                        $requirements[] = "Include detailed comments and documentation";
+                        break;
+                    case 'error_handling':
+                        $requirements[] = "Implement comprehensive error handling";
+                        break;
+                    case 'psr12':
+                        if ($language === 'php') {
+                            $requirements[] = "Follow PSR-12 coding standards";
+                        }
+                        break;
+                    case 'type_hints':
+                        $requirements[] = "Use type hints/annotations where applicable";
+                        break;
+                }
+            }
+
+            // Construct enhanced prompt
+            $enhancedPrompt = implode("\n", [
+                "Generate {$language} code for the following requirement:",
+                $prompt,
+                "\nRequirements:",
+                ...array_map(fn($req) => "- {$req}", $requirements),
+                "\nProvide clean, maintainable code."
+            ]);
+            
+            // Get code from Groq API
             $result = $this->groqApi->generateCode($enhancedPrompt);
             
             // Log successful generation
@@ -47,5 +76,58 @@ class CodeGeneratorService
                 'error' => 'Failed to generate code: ' . $e->getMessage()
             ];
         }
+    }
+
+    /**
+     * Get language-specific code generation requirements
+     * 
+     * @param string $language
+     * @return array
+     */
+    protected function getLanguageRequirements($language)
+    {
+        $common = [
+            'Follow best practices and conventions',
+            'Use meaningful variable and function names',
+            'Include proper code organization and structure'
+        ];
+
+        $specific = [
+            'php' => [
+                'Follow PHP 8.0+ features where appropriate',
+                'Use proper namespacing',
+                'Follow SOLID principles'
+            ],
+            'javascript' => [
+                'Use modern ES6+ features',
+                'Follow async/await patterns for asynchronous code',
+                'Consider browser compatibility'
+            ],
+            'python' => [
+                'Follow PEP 8 style guide',
+                'Use Python 3.x features',
+                'Include proper type hints (Python 3.5+)'
+            ],
+            'java' => [
+                'Follow Java coding conventions',
+                'Use appropriate access modifiers',
+                'Include proper exception handling'
+            ],
+            'cpp' => [
+                'Follow modern C++ practices',
+                'Use STL where appropriate',
+                'Include memory management considerations'
+            ],
+            'csharp' => [
+                'Follow C# conventions',
+                'Use appropriate access modifiers',
+                'Include proper exception handling'
+            ]
+        ];
+
+        return array_merge(
+            $common,
+            $specific[$language] ?? []
+        );
     }
 }

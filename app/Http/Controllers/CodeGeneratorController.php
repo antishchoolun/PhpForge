@@ -24,7 +24,9 @@ class CodeGeneratorController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'prompt' => 'required|string|min:10',
-            'language' => 'required|string|in:php,javascript,python,java,cpp,csharp'
+            'language' => 'required|string|in:php,javascript,python,java,cpp,csharp',
+            'options' => 'nullable|array',
+            'options.*' => 'string|in:comments,error_handling,psr12,type_hints'
         ]);
         
         if ($validator->fails()) {
@@ -36,7 +38,8 @@ class CodeGeneratorController extends Controller
         
         $result = $this->codeGenerator->generateCode(
             $request->input('prompt'),
-            $request->input('language')
+            $request->input('language'),
+            $request->input('options', [])
         );
         
         return response()->json($result);

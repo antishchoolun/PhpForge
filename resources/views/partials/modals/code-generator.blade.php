@@ -1,34 +1,49 @@
 <div id="code-generator-modal" class="modal">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <div class="modal-content">
         <div class="modal-header">
             <h2>PHP Code Generator</h2>
             <button class="close-modal" onclick="closeModal('code-generator')">&times;</button>
         </div>
         <div class="tool-interface">
-            <div class="input-group">
-                <label for="code-prompt">Describe what you need in plain language:</label>
-                <textarea id="code-prompt" class="input-control" placeholder="Example: Create a PHP function that connects to a MySQL database and fetches all users from a 'users' table"></textarea>
-            </div>
-            <div class="input-group">
-                <label>Additional Options:</label>
-                <div class="flex gap-4 flex-wrap">
-                    <label class="flex items-center gap-2">
-                        <input type="checkbox" checked> Include comments
-                    </label>
-                    <label class="flex items-center gap-2">
-                        <input type="checkbox" checked> Error handling
-                    </label>
-                    <label class="flex items-center gap-2">
-                        <input type="checkbox"> PSR-12 compliance
-                    </label>
-                    <label class="flex items-center gap-2">
-                        <input type="checkbox"> Type hinting
-                    </label>
+            <form id="code-generator-form" class="space-y-4">
+                <div class="input-group">
+                    <label for="code-prompt">Describe what you need in plain language:</label>
+                    <textarea id="code-prompt" name="prompt" class="input-control" required
+                        placeholder="Example: Create a PHP function that connects to a MySQL database and fetches all users from a 'users' table"></textarea>
                 </div>
-            </div>
-            <button id="generate-code-btn" class="btn btn-primary" onclick="simulateCodeGeneration()">
-                Generate Code
-            </button>
+                <div class="input-group">
+                    <label for="language">Programming Language:</label>
+                    <select id="language" name="language" class="input-control" required>
+                        <option value="php">PHP</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="python">Python</option>
+                        <option value="java">Java</option>
+                        <option value="cpp">C++</option>
+                        <option value="csharp">C#</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Additional Options:</label>
+                    <div class="flex gap-4 flex-wrap">
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" name="options[]" value="comments" checked> Include comments
+                        </label>
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" name="options[]" value="error_handling" checked> Error handling
+                        </label>
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" name="options[]" value="psr12"> PSR-12 compliance
+                        </label>
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" name="options[]" value="type_hints"> Type hinting
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" id="generate-code-btn" class="btn btn-primary">
+                    Generate Code
+                </button>
+            </form>
 
             <div id="code-result" style="display: none;">
                 <div class="code-area">
