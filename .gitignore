@@ -1,1 +1,45 @@
-vendor
+# Environment files
+.env
+.env.backup
+
+# Composer
+/vendor/
+composer.lock
+
+# IDE files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.phpstorm.meta.php
+_ide_helper.php
+
+# Cache and logs
+/cache/*
+/logs/*
+/storage/*
+!/cache/.gitkeep
+!/logs/.gitkeep
+!/storage/.gitkeep
+
+# Test coverage
+/coverage/
+.phpunit.cache/
+.phpunit.result.cache
+
+# Node modules (if used in future)
+/node_modules/
+package-lock.json
+
+# Generated files
+/public/assets/uploads/*
+!/public/assets/uploads/.gitkeep
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

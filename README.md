@@ -1,190 +1,199 @@
 # PhpForge.com - AI-Powered PHP Tools Suite
 
-A comprehensive web application providing AI-powered tools for PHP development, optimized for shared hosting environments.
-
-## Features
-
-- **PHP Code Generator**: Transform natural language into clean, efficient PHP code
-- **AI-Powered Debugging**: Instantly identify and fix code errors
-- **Security Analysis**: Detect and prevent security vulnerabilities
-- **Performance Optimization**: Get AI-powered suggestions for code optimization
-- **Documentation Generator**: Create comprehensive documentation automatically
-- **Domain Valuation**: Evaluate domain names using AI market analysis
-
-## Technology Stack
-
-- **Frontend**:
-
-  - Vanilla JavaScript with modern patterns
-  - Custom CSS with variables
-  - Responsive design
-  - Progressive enhancement
-  - Animate.css for animations
-  - Feather icons
-
-- **Backend**:
-
-  - PHP 8.2+
-  - PDO for database operations
-  - Lightweight custom framework
-  - Groq API integration
-  - JWT authentication
-
-- **Database**:
-  - MySQL/MariaDB
-  - Prepared statements
-  - Connection pooling
-  - Query optimization
-
-## Project Structure
-
-See [structure.md](structure.md) for detailed project architecture and organization.
+A modern web application providing AI-powered tools for PHP development, optimized for shared hosting environments.
 
 ## Requirements
 
-- PHP 7.2 or higher
+- PHP 8.2 or higher
 - MySQL 5.7 or higher
 - Apache/Nginx web server
-- SSL certificate (for production)
-- Composer for dependency management
+- Composer
+- Required PHP extensions:
+  - PDO and PDO_MySQL
+  - JSON
+  - MBString
+  - OpenSSL
+  - Sodium
 
-## Installation
+## Quick Start
 
 1. Clone the repository:
-
    ```bash
    git clone https://github.com/yourusername/phpforge.git
    cd phpforge
    ```
 
-2. Install dependencies:
-
+2. Run the setup script:
    ```bash
-   composer install
+   composer setup
+   ```
+   This will:
+   - Install dependencies
+   - Create necessary directories
+   - Set up environment file
+   - Configure database
+   - Generate application key
+   - Set proper permissions
+
+3. Configure your environment:
+   - Open `.env` and update the following:
+     ```env
+     APP_URL=http://your-domain.com
+     DB_DATABASE=your_database
+     DB_USERNAME=your_username
+     DB_PASSWORD=your_password
+     GROQ_API_KEY=your_groq_api_key
+     ```
+
+4. Set up the web server:
+   - Point your web server's document root to the `public` directory
+   - Ensure mod_rewrite is enabled for Apache
+   - Set up proper permissions:
+     ```bash
+     chmod -R 755 public/
+     chmod -R 755 storage/
+     chmod -R 755 cache/
+     chmod -R 755 logs/
+     ```
+
+5. Access the application:
+   - Visit `http://localhost` or your configured domain
+   - Register an account and start using the tools
+
+## Directory Structure
+
+```
+PhpForge/
+├── public/                 # Public-facing files
+│   ├── index.php          # Entry point
+│   ├── assets/            # Compiled assets
+│   └── .htaccess         # Apache configuration
+├── src/                   # Source files
+│   ├── Config/           # Configuration files
+│   ├── Controllers/      # Request handlers
+│   ├── Models/           # Database models
+│   ├── Services/         # Business logic
+│   └── Core/             # Framework core
+├── templates/            # View templates
+├── tests/               # Test files
+├── scripts/             # Setup and utility scripts
+├── logs/               # Application logs
+└── cache/              # Cache files
+```
+
+## Available Tools
+
+- **PHP Code Generator**: Transform natural language into clean PHP code
+- **AI-Powered Debugging**: Instant error detection and fixes
+- **Security Analysis**: Code vulnerability scanning
+- **Performance Optimization**: Code performance suggestions
+- **Documentation Generator**: Automatic code documentation
+- **Domain Valuation**: AI-based domain name evaluation
+
+## Development
+
+1. Enable debug mode in `.env`:
+   ```env
+   APP_DEBUG=true
+   APP_ENV=development
    ```
 
-3. Set up environment variables:
-
-   ```bash
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
-
-4. Set up the database:
-
-   ```bash
-   # Import database schema
-   mysql -u your_username -p your_database < schema.sql
-   ```
-
-5. Configure web server:
-
-   - Point document root to the `public/` directory
-   - Ensure `.htaccess` is enabled (Apache)
-   - Configure URL rewriting
-
-6. Set proper permissions:
-   ```bash
-   chmod -R 755 public/
-   chmod -R 755 logs/
-   ```
-
-## Development Setup
-
-1. Install development dependencies:
-
-   ```bash
-   composer install --dev
-   ```
-
-2. Start local development server:
-
+2. Run PHP's built-in server (for development):
    ```bash
    php -S localhost:8000 -t public/
    ```
 
-3. Access the application:
-   ```
-   http://localhost:8000
+3. Watch logs:
+   ```bash
+   tail -f logs/app.log
    ```
 
 ## Testing
 
 Run the test suite:
-
 ```bash
 composer test
 ```
 
-Run specific test category:
-
+Run specific tests:
 ```bash
-composer test-unit    # Unit tests
-composer test-feature # Feature tests
+composer test-unit     # Unit tests
+composer test-feature  # Feature tests
 ```
 
-## Deployment
+Check code style:
+```bash
+composer check-style  # Check code style
+composer fix-style    # Fix code style issues
+```
 
-1. Update dependencies:
+Run static analysis:
+```bash
+composer phpstan      # Run PHPStan analysis
+```
 
+## Troubleshooting
+
+### Common Issues
+
+1. **Permission Errors**
    ```bash
-   composer install --no-dev --optimize-autoloader
+   chmod -R 755 storage cache logs
+   chown -R www-data:www-data storage cache logs
    ```
 
-2. Set environment variables:
+2. **Database Connection Failed**
+   - Verify database credentials in `.env`
+   - Ensure MySQL service is running
+   - Check if database exists and user has proper permissions
 
-   - Set `APP_ENV=production`
-   - Configure production database
-   - Set up Groq API credentials
+3. **500 Server Error**
+   - Check `logs/app.log` for detailed error messages
+   - Verify PHP version and extensions
+   - Ensure `.env` file exists and is properly configured
 
-3. Optimize application:
+4. **Blank Page**
+   - Enable error reporting in `php.ini`
+   - Check PHP error logs
+   - Verify mod_rewrite is enabled
 
-   ```bash
-   # Compile assets
-   npm run build
+### Debug Mode
 
-   # Clear caches
-   php scripts/cache-clear.php
-   ```
-
-4. Security checklist:
-   - Enable HTTPS
-   - Set secure cookie flags
-   - Configure CORS
-   - Set up rate limiting
-
-## Browser Support
-
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## Documentation
-
-- [Project Structure](structure.md)
-- [API Documentation](docs/api.md)
-- [Development Guide](docs/development.md)
-- [Deployment Guide](docs/deployment.md)
+To enable detailed error reporting, set in `.env`:
+```env
+APP_DEBUG=true
+APP_ENV=development
+```
 
 ## Security
 
-Report security vulnerabilities to security@phpforge.com
+- Report security vulnerabilities to security@phpforge.com
+- Do not report security issues in public issues
+- Keep your dependencies up to date
+
+## Updates
+
+1. Pull latest changes:
+   ```bash
+   git pull origin main
+   ```
+
+2. Update dependencies:
+   ```bash
+   composer update
+   ```
+
+3. Run migrations:
+   ```bash
+   php scripts/migrate.php
+   ```
 
 ## License
 
 MIT License - See [LICENSE](LICENSE) file for details
 
-## Contact
+## Support
 
-- Website: [https://phpforge.com](https://phpforge.com)
+- Documentation: [docs.phpforge.com](https://docs.phpforge.com)
 - Email: support@phpforge.com
-- Twitter: [@phpforge](https://twitter.com/phpforge)
+- Community: [Discord](https://discord.gg/phpforge)
