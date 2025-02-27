@@ -12,34 +12,64 @@ ini_set('display_errors', 1);
 define('ROOT_DIR', dirname(__DIR__));
 
 // Autoload dependencies
+if (!file_exists(ROOT_DIR . '/vendor/autoload.php')) {
+    die('Please run "composer install" to install dependencies');
+}
 require ROOT_DIR . '/vendor/autoload.php';
+
+// For debugging
+function debug($message, $data = null) {
+    if (isset($_ENV['APP_DEBUG']) && $_ENV['APP_DEBUG']) {
+        error_log($message . ($data ? ': ' . print_r($data, true) : ''));
+    }
+}
 
 // Load environment variables
 try {
     $dotenv = Dotenv\Dotenv::createImmutable(ROOT_DIR);
     $dotenv->load();
+    
+    // Required environment variables
     $dotenv->required([
-        'APP_NAME', 'APP_ENV', 'APP_URL', 
-        'DB_HOST', 'DB_DATABASE', 'DB_USERNAME'
+        'APP_NAME',
+        'APP_ENV',
+        'APP_URL',
+        'DB_HOST',
+        'DB_DATABASE',
+        'DB_USERNAME'
     ]);
+
+    debug('Environment variables loaded');
 } catch (Exception $e) {
     die('Error loading environment variables: ' . $e->getMessage());
 }
 
 // Initialize the application
 try {
+    debug('Creating application instance');
+    
     // Create application instance
-    $app = new \PhpForge\Core\App();
+    $app = \PhpForge\Core\App::getInstance();
 
+    debug('Registering error handlers');
     // Register error handlers
     $app->registerErrorHandlers();
 
-    // Load configurations
-    $app->loadConfigurations();
-
+    debug('Initializing services');
     // Initialize services
     $app->initializeServices();
 
+    debug('Current request', [
+        'METHOD' => $_SERVER['REQUEST_METHOD'],
+        'URI' => $_SERVER['REQUEST_URI'],
+        'SCRIPT_NAME' => $_SERVER['SCRIPT_NAME']
+    ]);
+
+    // Get router for debugging
+    $router = $app->service('router');
+    debug('Registered routes', $router->getRoutes());
+
+    debug('Handling request');
     // Handle the request
     $app->handleRequest();
 } catch (Exception $e) {

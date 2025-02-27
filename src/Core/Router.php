@@ -22,9 +22,30 @@ class Router
     private $groupPrefix = '';
 
     /**
-     * @var array Route middleware
+     * Create a new Router instance
      */
-    private $middleware = [];
+    public function __construct()
+    {
+        $this->routes = [
+            'GET' => [],
+            'POST' => [],
+            'PUT' => [],
+            'DELETE' => []
+        ];
+        $this->groupPrefix = '';
+    }
+
+    /**
+     * Debug log helper
+     */
+    private function debug($message, $data = null): void
+    {
+        if (function_exists('debug')) {
+            debug($message, $data);
+        } elseif (isset($_ENV['APP_DEBUG']) && $_ENV['APP_DEBUG']) {
+            error_log($message . ($data ? ': ' . print_r($data, true) : ''));
+        }
+    }
 
     /**
      * Register a GET route
@@ -59,144 +80,129 @@ class Router
     }
 
     /**
-     * Create a route group
-     */
-    public function group(string $prefix, callable $callback): void
-    {
-        $previousGroupPrefix = $this->groupPrefix;
-        $this->groupPrefix .= $prefix;
-
-        $callback($this);
-
-        $this->groupPrefix = $previousGroupPrefix;
-    }
-
-    /**
      * Add a route to the router
      */
     private function addRoute(string $method, string $uri, $handler): void
     {
-        // Prepare the route URI with group prefix
-        $uri = $this->groupPrefix . '/' . trim($uri, '/');
+        // Prepare the route URI
         $uri = '/' . trim($uri, '/');
-
-        // Convert handler string to array with controller and method
-        if (is_string($handler)) {
-            [$controller, $method] = explode('@', $handler);
-            $handler = [
-                'controller' => "PhpForge\\Controllers\\$controller",
-                'method' => $method
-            ];
+        
+        if (!empty($this->groupPrefix)) {
+            $uri = rtrim($this->groupPrefix, '/') . '/' . ltrim($uri, '/');
         }
 
-        // Store route with pattern and handler
+        $this->debug("Registering route: {$method} {$uri}");
+
+        // Store route
         $this->routes[$method][$uri] = [
-            'pattern' => $this->convertUriToRegex($uri),
-            'handler' => $handler,
-            'middleware' => $this->middleware
+            'uri' => $uri,
+            'handler' => $handler
         ];
     }
 
     /**
-     * Convert URI to regex pattern
-     */
-    private function convertUriToRegex(string $uri): string
-    {
-        return preg_replace('/\{([a-zA-Z]+)\}/', '(?P<$1>[^/]+)', $uri);
-    }
-
-    /**
-     * Get current request URI
-     */
-    private function getCurrentUri(): string
-    {
-        $uri = $_SERVER['REQUEST_URI'];
-        
-        // Remove query string
-        if (false !== $pos = strpos($uri, '?')) {
-            $uri = substr($uri, 0, $pos);
-        }
-        
-        return '/' . trim($uri, '/');
-    }
-
-    /**
-     * Match the route and return handler with params
-     */
-    private function matchRoute(string $method, string $uri): ?array
-    {
-        $routes = $this->routes[$method] ?? [];
-        
-        foreach ($routes as $route => $data) {
-            if (preg_match('#^' . $data['pattern'] . '$#', $uri, $matches)) {
-                // Extract named parameters
-                $params = array_filter($matches, function ($key) {
-                    return !is_numeric($key);
-                }, ARRAY_FILTER_USE_KEY);
-
-                return [
-                    'handler' => $data['handler'],
-                    'params' => $params,
-                    'middleware' => $data['middleware'] ?? []
-                ];
-            }
-        }
-        
-        return null;
-    }
-
-    /**
-     * Dispatch the request to the appropriate handler
+     * Dispatch the request
      */
     public function dispatch(): void
     {
         $method = $_SERVER['REQUEST_METHOD'];
-        $uri = $this->getCurrentUri();
-        
-        // Match the route
-        $route = $this->matchRoute($method, $uri);
-        
-        if ($route === null) {
-            http_response_code(404);
-            throw new Exception('Route not found');
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $uri = '/' . trim($uri, '/');
+
+        if ($uri === '') {
+            $uri = '/';
         }
 
-        try {
-            // Execute middleware stack
-            foreach ($route['middleware'] as $middleware) {
-                $middlewareInstance = new $middleware();
-                $middlewareInstance->handle();
-            }
+        $this->debug("Dispatching request", [
+            'method' => $method,
+            'uri' => $uri,
+            'available_routes' => $this->routes[$method] ?? []
+        ]);
 
-            // Create controller instance and call method
-            if (is_array($route['handler'])) {
-                $controller = new $route['handler']['controller']();
-                $method = $route['handler']['method'];
-                
-                $response = $controller->$method(...array_values($route['params']));
-            } else {
-                // Handle closure based routes
-                $response = ($route['handler'])(...array_values($route['params']));
-            }
-
-            // Send the response
-            if (is_array($response) || is_object($response)) {
-                header('Content-Type: application/json');
-                echo json_encode($response);
-            } else {
-                echo $response;
-            }
-        } catch (Exception $e) {
-            throw $e;
+        // Check if method is supported
+        if (!isset($this->routes[$method])) {
+            throw new Exception("HTTP method not supported: {$method}", 405);
         }
+
+        // Check if route exists
+        if (!isset($this->routes[$method][$uri])) {
+            $this->debug("No route found for {$method} {$uri}");
+            $this->debug("Available routes", $this->routes[$method]);
+            throw new Exception("Route not found: {$method} {$uri}", 404);
+        }
+
+        $route = $this->routes[$method][$uri];
+        $handler = $route['handler'];
+
+        $this->debug("Found route", [
+            'uri' => $uri,
+            'handler' => is_string($handler) ? $handler : 'Closure'
+        ]);
+
+        // Handle string handlers (Controller@method)
+        if (is_string($handler)) {
+            [$controllerName, $method] = explode('@', $handler);
+            
+            // Add namespace if not present
+            if (strpos($controllerName, '\\') === false) {
+                $controllerName = "PhpForge\\Controllers\\{$controllerName}";
+            }
+
+            $this->debug("Loading controller", [
+                'class' => $controllerName,
+                'method' => $method
+            ]);
+
+            if (!class_exists($controllerName)) {
+                $this->debug("Controller not found: {$controllerName}");
+                throw new Exception("Controller not found: {$controllerName}", 500);
+            }
+
+            $controller = new $controllerName();
+            
+            if (!method_exists($controller, $method)) {
+                $this->debug("Method not found: {$controllerName}::{$method}");
+                throw new Exception("Method not found: {$controllerName}::{$method}", 500);
+            }
+
+            $this->debug("Calling controller method: {$controllerName}::{$method}");
+            $controller->$method();
+            return;
+        }
+
+        // Handle closure
+        if (is_callable($handler)) {
+            $this->debug("Executing closure handler");
+            $handler();
+            return;
+        }
+
+        $this->debug("Invalid route handler");
+        throw new Exception('Invalid route handler', 500);
     }
 
     /**
-     * Add middleware to the route
+     * Create a route group
      */
-    public function middleware(string $middleware): self
+    public function group(string $prefix, callable $callback): void
     {
-        $this->middleware[] = $middleware;
-        return $this;
+        $previousPrefix = $this->groupPrefix;
+        $this->groupPrefix = $previousPrefix . '/' . trim($prefix, '/');
+        
+        $this->debug("Creating route group", [
+            'prefix' => $this->groupPrefix
+        ]);
+
+        $callback($this);
+        
+        $this->groupPrefix = $previousPrefix;
+    }
+
+    /**
+     * Debug method to get registered routes
+     */
+    public function getRoutes(): array
+    {
+        return $this->routes;
     }
 }

@@ -27,6 +27,18 @@ class App
     private $db;
 
     /**
+     * Debug log helper
+     */
+    private function debug($message, $data = null): void
+    {
+        if (function_exists('debug')) {
+            debug($message, $data);
+        } elseif (isset($_ENV['APP_DEBUG']) && $_ENV['APP_DEBUG']) {
+            error_log($message . ($data ? ': ' . print_r($data, true) : ''));
+        }
+    }
+
+    /**
      * Create a new Application instance
      */
     public function __construct()
@@ -36,7 +48,45 @@ class App
         }
 
         self::$instance = $this;
+        
+        $this->debug('Creating Router instance');
         $this->router = new Router();
+    }
+
+    /**
+     * Register application routes
+     */
+    private function registerRoutes(): void
+    {
+        $this->debug('Registering routes');
+
+        // Web Routes
+        $this->router->get('/', 'HomeController@index');
+        $this->router->get('/tools', 'HomeController@tools');
+        $this->router->get('/pricing', 'HomeController@pricing');
+        $this->router->get('/docs', 'HomeController@documentation');
+        $this->router->get('/blog', 'HomeController@blog');
+
+        // Auth Routes
+        $this->router->post('/auth/login', 'AuthController@login');
+        $this->router->post('/auth/register', 'AuthController@register');
+        $this->router->post('/auth/logout', 'AuthController@logout');
+        $this->router->post('/auth/forgot-password', 'AuthController@forgotPassword');
+        $this->router->post('/auth/reset-password', 'AuthController@resetPassword');
+
+        // Tool Routes
+        $this->router->post('/api/tools/generate', 'ToolController@generate');
+        $this->router->post('/api/tools/debug', 'ToolController@debug');
+        $this->router->post('/api/tools/security', 'ToolController@security');
+        $this->router->post('/api/tools/optimize', 'ToolController@optimize');
+        $this->router->post('/api/tools/document', 'ToolController@document');
+        $this->router->post('/api/tools/evaluate', 'ToolController@evaluate');
+        
+        // Tool Stats Routes
+        $this->router->get('/api/tools/stats', 'ToolController@getStats');
+        $this->router->get('/api/tools/history', 'ToolController@getHistory');
+
+        $this->debug('Routes registered', $this->router->getRoutes());
     }
 
     /**
@@ -55,6 +105,8 @@ class App
      */
     public function registerErrorHandlers(): void
     {
+        $this->debug('Registering error handlers');
+
         set_error_handler(function ($severity, $message, $file, $line) {
             throw new \ErrorException($message, 0, $severity, $file, $line);
         });
@@ -65,10 +117,17 @@ class App
     }
 
     /**
-     * Load application configurations
+     * Initialize application services
      */
-    public function loadConfigurations(): void
+    public function initializeServices(): void
     {
+        $this->debug('Initializing services');
+
+        // Initialize session
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         // Load database configuration
         $this->db = new Database([
             'host' => $_ENV['DB_HOST'],
@@ -77,15 +136,6 @@ class App
             'password' => $_ENV['DB_PASSWORD'],
         ]);
 
-        // Initialize router with routes
-        $this->initializeRoutes();
-    }
-
-    /**
-     * Initialize application services
-     */
-    public function initializeServices(): void
-    {
         // Register core services
         $this->services['db'] = $this->db;
         $this->services['router'] = $this->router;
@@ -95,6 +145,11 @@ class App
 
         // Initialize caching
         $this->initializeCaching();
+
+        // Register routes
+        $this->registerRoutes();
+
+        $this->debug('Services initialized');
     }
 
     /**
@@ -103,10 +158,18 @@ class App
     private function initializeLogging(): void
     {
         $logPath = ROOT_DIR . '/logs/app.log';
+        
+        // Create logs directory if it doesn't exist
+        if (!is_dir(dirname($logPath))) {
+            mkdir(dirname($logPath), 0777, true);
+        }
+        
         $this->services['logger'] = new \Monolog\Logger('phpforge');
         $this->services['logger']->pushHandler(
             new \Monolog\Handler\RotatingFileHandler($logPath, 30)
         );
+
+        $this->debug('Logging service initialized');
     }
 
     /**
@@ -124,38 +187,8 @@ class App
             3600,
             $cacheDir
         );
-    }
 
-    /**
-     * Initialize application routes
-     */
-    private function initializeRoutes(): void
-    {
-        // API Routes
-        $this->router->group('/api/v1', function (Router $router) {
-            // Auth routes
-            $router->post('/auth/login', 'AuthController@login');
-            $router->post('/auth/register', 'AuthController@register');
-            $router->post('/auth/logout', 'AuthController@logout');
-
-            // Tool routes
-            $router->post('/tools/generate', 'ToolController@generate');
-            $router->post('/tools/debug', 'ToolController@debug');
-            $router->post('/tools/security', 'ToolController@security');
-            $router->post('/tools/optimize', 'ToolController@optimize');
-            $router->post('/tools/document', 'ToolController@document');
-            $router->post('/tools/evaluate', 'ToolController@evaluate');
-
-            // User routes
-            $router->get('/user/usage', 'UserController@usage');
-        });
-
-        // Web Routes
-        $this->router->get('/', 'HomeController@index');
-        $this->router->get('/tools', 'HomeController@tools');
-        $this->router->get('/pricing', 'HomeController@pricing');
-        $this->router->get('/docs', 'HomeController@documentation');
-        $this->router->get('/blog', 'HomeController@blog');
+        $this->debug('Caching service initialized');
     }
 
     /**
@@ -164,6 +197,11 @@ class App
     public function handleRequest(): void
     {
         try {
+            $this->debug('Handling request', [
+                'method' => $_SERVER['REQUEST_METHOD'],
+                'uri' => $_SERVER['REQUEST_URI']
+            ]);
+
             $this->router->dispatch();
         } catch (Exception $e) {
             $this->handleException($e);
@@ -176,21 +214,37 @@ class App
     private function handleException(\Throwable $e): void
     {
         // Log the error
+        $message = $e->getMessage();
+        $trace = $e->getTraceAsString();
+        
+        $this->debug('Exception caught', [
+            'message' => $message,
+            'trace' => $trace
+        ]);
+
         if (isset($this->services['logger'])) {
-            $this->services['logger']->error($e->getMessage(), [
-                'trace' => $e->getTraceAsString()
+            $this->services['logger']->error($message, [
+                'trace' => $trace
             ]);
         }
 
         // Set appropriate HTTP status code
-        http_response_code(500);
+        $code = $e->getCode() ?: 500;
+        if ($code < 100 || $code > 599) {
+            $code = 500;
+        }
+        http_response_code($code);
 
         // Display error based on environment
         if (filter_var($_ENV['APP_DEBUG'] ?? false, FILTER_VALIDATE_BOOLEAN)) {
             echo '<h1>Application Error</h1>';
-            echo '<pre>' . $e->getMessage() . "\n" . $e->getTraceAsString() . '</pre>';
+            echo '<pre>' . $message . "\n" . $trace . '</pre>';
         } else {
-            echo 'An unexpected error occurred. Please try again later.';
+            if ($code === 404) {
+                $this->render('404');
+            } else {
+                echo 'An unexpected error occurred. Please try again later.';
+            }
         }
     }
 
@@ -203,5 +257,16 @@ class App
             throw new Exception("Service '$name' not found");
         }
         return $this->services[$name];
+    }
+
+    /**
+     * Render a view
+     */
+    private function render(string $view): void
+    {
+        $viewPath = ROOT_DIR . '/templates/' . $view . '.php';
+        if (file_exists($viewPath)) {
+            include $viewPath;
+        }
     }
 }

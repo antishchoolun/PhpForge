@@ -15,11 +15,39 @@ abstract class Controller
     protected $request;
 
     /**
+     * @var Database Database instance
+     */
+    protected $db;
+
+    /**
+     * Debug log helper
+     */
+    protected function debug($message, $data = null): void
+    {
+        if (function_exists('debug')) {
+            debug($message, $data);
+        } elseif (isset($_ENV['APP_DEBUG']) && $_ENV['APP_DEBUG']) {
+            error_log($message . ($data ? ': ' . print_r($data, true) : ''));
+        }
+    }
+
+    /**
      * Create a new controller instance
      */
     public function __construct()
     {
+        $this->debug('Initializing controller: ' . get_class($this));
+        
         $this->app = App::getInstance();
+        $this->db = $this->app->service('db');
+        
+        // Initialize basic request data first
+        $this->request = [
+            'method' => $_SERVER['REQUEST_METHOD'],
+            'uri' => $_SERVER['REQUEST_URI']
+        ];
+        
+        // Then add additional request data
         $this->initializeRequest();
     }
 
@@ -28,13 +56,13 @@ abstract class Controller
      */
     protected function initializeRequest(): void
     {
-        $this->request = [
-            'method' => $_SERVER['REQUEST_METHOD'],
-            'uri' => $_SERVER['REQUEST_URI'],
+        $this->request = array_merge($this->request, [
             'params' => $_REQUEST,
             'headers' => $this->getRequestHeaders(),
             'body' => $this->getRequestBody()
-        ];
+        ]);
+
+        $this->debug('Request initialized', $this->request);
     }
 
     /**
@@ -57,20 +85,54 @@ abstract class Controller
      */
     protected function getRequestBody(): array
     {
-        $body = [];
+        $method = $_SERVER['REQUEST_METHOD'];
         
-        if ($this->request['method'] === 'POST' || $this->request['method'] === 'PUT') {
+        if ($method === 'POST' || $method === 'PUT') {
             $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
             
             if (strpos($contentType, 'application/json') !== false) {
                 $input = file_get_contents('php://input');
-                $body = json_decode($input, true) ?? [];
-            } else {
-                $body = $_POST;
-            }
+                return json_decode($input, true) ?? [];
+            } 
+            
+            return $_POST;
         }
         
-        return $body;
+        return [];
+    }
+
+    /**
+     * Render a view
+     */
+    protected function render(string $view, array $data = []): void
+    {
+        $this->debug('Rendering view', [
+            'view' => $view,
+            'data' => array_keys($data)
+        ]);
+
+        // Extract data to make it available in the view
+        extract($data);
+        
+        // Start output buffering
+        ob_start();
+        
+        // Include the view file
+        $viewPath = ROOT_DIR . '/templates/' . $view . '.php';
+        
+        if (!file_exists($viewPath)) {
+            $this->debug("View not found", ['path' => $viewPath]);
+            throw new \Exception("View not found: {$view}");
+        }
+        
+        $this->debug("Including view file", ['path' => $viewPath]);
+        include $viewPath;
+        
+        // Get the contents and clean the buffer
+        $content = ob_get_clean();
+        
+        // Send content
+        echo $content;
     }
 
     /**
@@ -152,40 +214,5 @@ abstract class Controller
         }
 
         return $data;
-    }
-
-    /**
-     * Render a view
-     */
-    protected function render(string $view, array $data = []): void
-    {
-        $viewPath = ROOT_DIR . '/templates/' . $view . '.php';
-        
-        if (!file_exists($viewPath)) {
-            throw new \Exception("View {$view} not found");
-        }
-
-        // Extract data to make it available in the view
-        extract($data);
-        
-        // Start output buffering
-        ob_start();
-        
-        // Include the view file
-        include $viewPath;
-        
-        // Get the contents and clean the buffer
-        $content = ob_get_clean();
-        
-        echo $content;
-        exit;
-    }
-
-    /**
-     * Get a service from the container
-     */
-    protected function service(string $name)
-    {
-        return $this->app->service($name);
     }
 }
