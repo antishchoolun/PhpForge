@@ -67,6 +67,55 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    flex: 1;
+    min-height: 0;
+    padding-right: 0.5rem;
+}
+
+/* Loading State */
+.spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s linear infinite;
+    margin-right: 0.5rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Scrollbar Styling */
+.modal-content::-webkit-scrollbar,
+.code-result::-webkit-scrollbar,
+.console-content::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track,
+.code-result::-webkit-scrollbar-track,
+.console-content::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb,
+.code-result::-webkit-scrollbar-thumb,
+.console-content::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover,
+.code-result::-webkit-scrollbar-thumb:hover,
+.console-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
 }
 
 .input-group {
@@ -98,6 +147,105 @@
 textarea.input-control {
     min-height: 150px;
     resize: vertical;
+}
+
+/* Code Result */
+.code-result {
+    margin-top: 1.5rem;
+    max-height: 60vh;
+    overflow-y: auto;
+    border-radius: 8px;
+    background: var(--card-bg);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.code-area {
+    position: relative;
+    background: var(--code-bg, #1e1e1e);
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+}
+
+.code-area-tools {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+    z-index: 10;
+}
+
+.code-area-tools button {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 4px;
+    padding: 0.4rem;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.code-area-tools button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.code-area pre {
+    margin: 0;
+    padding: 2rem;
+    overflow-x: auto;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.code-area code {
+    color: #fff;
+}
+
+.console {
+    background: var(--card-bg);
+    border-radius: 0 0 8px 8px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.console-header {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    font-weight: 500;
+}
+
+.console-content {
+    padding: 1rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.console-line {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.console-prefix {
+    color: var(--success);
+}
+
+/* Modal Content Scroll */
+.modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    position: sticky;
+    top: 0;
+    background: var(--card-bg);
+    z-index: 10;
+    padding: 1rem 0;
 }
 
 /* Responsive Modal */

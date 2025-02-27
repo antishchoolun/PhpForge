@@ -1,6 +1,6 @@
 <div id="code-generator-modal" class="modal">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <div class="modal-content">
+    <div class="modal-content custom-scrollbar">
         <div class="modal-header">
             <h2>PHP Code Generator</h2>
             <button class="close-modal" onclick="closeModal('code-generator')">&times;</button>
