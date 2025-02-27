@@ -54,6 +54,6 @@
             </div>
         </footer>
     </div><!-- end .container -->
-    <script src="/PhpForge/src/js/app.js"></script>
+    <script src="/assets/js/app.js"></script>
 </body>
 </html>

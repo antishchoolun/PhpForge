@@ -1,10 +1,43 @@
-RewriteEngine On
-RewriteBase /projects/PhpForge/public/
+# Enable URL rewriting
 
-# Redirect all requests to index.php unless file/directory exists
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php/$1 [L,QSA]
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /projects/PhpForge/public/
+    
+    # If the requested file/directory doesn't exist, route through index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
 
-# Enable access to assets directory
-RewriteRule ^assets/ - [L]
+# Allow only specific file types
+
+<FilesMatch "\.(php|html|css|js|jpe?g|png|gif|svg|ico)$">
+Order Allow,Deny
+Allow from all
+</FilesMatch>
+
+# Block access to sensitive files
+
+<FilesMatch "\.(env|sql|config|htaccess|md|lock|json)$">
+Order Allow,Deny
+Deny from all
+</FilesMatch>
+
+# Prevent directory listing
+
+Options -Indexes
+
+# Additional security headers
+
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# PHP settings for this directory
+
+php_flag display_errors off
+php_value error_reporting 0
