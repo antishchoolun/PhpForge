@@ -188,7 +188,7 @@ input[type="checkbox"]:checked {
 }
 
 input[type="checkbox"]:checked::after {
-    content: '';
+    content: "";
     position: absolute;
     left: 4px;
     top: 1px;
@@ -248,7 +248,7 @@ input[type="checkbox"]:focus {
     margin: 0;
     padding: 2rem;
     overflow-x: auto;
-    font-family: 'Fira Code', monospace;
+    font-family: "Fira Code", monospace;
     font-size: 0.9rem;
     line-height: 1.5;
 }
@@ -296,7 +296,6 @@ input[type="checkbox"]:focus {
 }
 
 .modal-header {
-    position: sticky;
     top: 0;
     background: var(--card-bg);
     z-index: 10;
@@ -310,7 +309,7 @@ input[type="checkbox"]:focus {
         padding: 1rem;
         margin: 1rem;
     }
-    
+
     .modal-header h2 {
         font-size: 1.5rem;
     }
