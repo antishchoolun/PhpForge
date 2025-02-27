@@ -1,6 +1,13 @@
 # Framework and Third-Party Tool Recommendations
 
-## Current Implementation vs Recommended Changes
+## Table of Contents
+1. [Recommended Changes](#recommended-changes)
+2. [Project Setup](#project-setup)
+3. [Development Workflow](#development-workflow)
+4. [Deployment](#deployment)
+5. [Troubleshooting](#troubleshooting)
+
+## Recommended Changes
 
 ### 1. Backend Framework
 **Current:** Custom lightweight routing and core framework
@@ -97,76 +104,227 @@
 - PHPStan for static analysis
 - PHP_CodeSniffer for style checking
 
-## Implementation Steps
+## Project Setup
 
-1. Add new dependencies to composer.json:
-```json
-{
-    "require": {
-        "slim/slim": "^4.11",
-        "doctrine/dbal": "^3.6",
-        "twig/twig": "^3.0",
-        "monolog/monolog": "^3.3",
-        "firebase/php-jwt": "^6.4",
-        "league/oauth2-server": "^8.4",
-        "respect/validation": "^2.2",
-        "zircote/swagger-php": "^4.7",
-        "ezyang/htmlpurifier": "^4.16"
-    },
-    "require-dev": {
-        "pestphp/pest": "^2.0",
-        "phpstan/phpstan": "^1.10",
-        "squizlabs/php_codesniffer": "^3.7"
-    }
+### Prerequisites
+- PHP 8.2 or higher
+- MySQL 5.7 or higher
+- Composer
+- Apache/Nginx web server
+- Required PHP extensions:
+  - pdo_mysql
+  - json
+  - mbstring
+  - openssl
+  - sodium
+  - xml
+  - curl
+
+### Step 1: Initial Setup
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/phpforge.git
+cd phpforge
+
+# Install dependencies
+composer install
+
+# Copy environment file
+cp .env.example .env
+
+# Generate application key
+php scripts/generate-key.php
+```
+
+### Step 2: Configuration
+Edit `.env` file:
+```env
+# Application
+APP_NAME=PhpForge
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8000
+APP_KEY=your-generated-key
+
+# Database
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=phpforge
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+
+# API Keys
+GROQ_API_KEY=your_groq_api_key
+
+# Cache and Session
+CACHE_DRIVER=file
+SESSION_DRIVER=file
+```
+
+### Step 3: Database Setup
+```bash
+# Create database
+mysql -u root -p -e "CREATE DATABASE phpforge CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+# Run migrations
+php scripts/migrate.php
+
+# Seed initial data
+php scripts/seed.php
+```
+
+### Step 4: Directory Permissions
+```bash
+# Set proper permissions
+chmod -R 755 public/
+chmod -R 755 storage/
+chmod -R 755 cache/
+chmod -R 755 logs/
+
+# Set ownership if using Apache
+sudo chown -R www-data:www-data storage/ cache/ logs/
+```
+
+### Step 5: Web Server Configuration
+
+#### Apache (.htaccess included in public/):
+```apache
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php/$1 [L]
+</IfModule>
+```
+
+#### Nginx (nginx.conf):
+```nginx
+location / {
+    try_files $uri $uri/ /index.php?$query_string;
 }
 ```
 
-2. Refactor the application structure:
-```
-PhpForge/
-├── config/             # Configuration files
-├── public/            # Public directory
-├── src/               # Source code
-│   ├── Application/  # Application core
-│   ├── Domain/      # Business logic
-│   ├── Infrastructure/ # External services
-│   └── Interface/   # Controllers and views
-├── templates/        # Twig templates
-├── tests/           # Test files
-└── var/            # Variable files (logs, cache)
+## Development Workflow
+
+### Starting the Development Server
+```bash
+# Start PHP development server
+php -S localhost:8000 -t public/
+
+# Or use the custom server script
+php scripts/serve.php
 ```
 
-3. Update the bootstrap process in public/index.php to use Slim Framework.
+### Watch for Changes
+```bash
+# Watch for PHP changes
+php scripts/watch.php
 
-4. Create configuration files for each third-party tool.
+# Watch for frontend changes (if using npm)
+npm run watch
+```
 
-## Benefits
+### Running Tests
+```bash
+# Run all tests
+composer test
 
-1. **Maintainability**
-   - Industry-standard components
-   - Well-documented dependencies
-   - Active community support
+# Run specific test suites
+composer test-unit     # Unit tests only
+composer test-feature  # Feature tests only
+composer test-integration  # Integration tests only
 
-2. **Security**
-   - Regularly updated security patches
-   - Industry-tested implementations
-   - Built-in security features
+# Code style and analysis
+composer check-style  # Check code style
+composer fix-style    # Fix code style issues
+composer analyze      # Run static analysis
+```
 
-3. **Performance**
-   - Optimized implementations
-   - Caching capabilities
-   - Connection pooling
+### Development URLs
+- Main application: http://localhost:8000
+- API documentation: http://localhost:8000/api/docs
+- Debug toolbar: http://localhost:8000/_debug (when APP_DEBUG=true)
 
-4. **Development Speed**
-   - Reduced boilerplate code
-   - Better developer experience
-   - Extensive documentation
+## Deployment
 
-## Compatibility Note
+### Production Checklist
+1. Update environment settings:
+```env
+APP_ENV=production
+APP_DEBUG=false
+```
 
-All recommended tools are:
-- Compatible with PHP 8.2+
-- Suitable for shared hosting environments
-- Low resource consumption
-- Minimal dependencies
-- Production-ready
+2. Optimize autoloader:
+```bash
+composer install --optimize-autoloader --no-dev
+```
+
+3. Clear caches:
+```bash
+php scripts/clear-cache.php
+```
+
+4. Update file permissions:
+```bash
+chmod -R 755 public/ storage/ cache/ logs/
+chown -R www-data:www-data storage/ cache/ logs/
+```
+
+### Shared Hosting Deployment
+1. Upload files via FTP/SFTP
+2. Point domain to public/ directory
+3. Update .env with production values
+4. Run deployment script:
+```bash
+php scripts/deploy.php
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **White Screen / 500 Error**
+   - Check logs/app.log
+   - Verify PHP version and extensions
+   - Ensure .env exists and is readable
+   - Check file permissions
+
+2. **Database Connection Failed**
+   ```bash
+   # Test database connection
+   php scripts/test-db.php
+   ```
+
+3. **Permission Issues**
+   ```bash
+   # Fix common permission issues
+   php scripts/fix-permissions.php
+   ```
+
+4. **Cache Issues**
+   ```bash
+   # Clear all caches
+   php scripts/clear-cache.php
+   ```
+
+### Debug Mode
+Enable detailed error reporting in .env:
+```env
+APP_DEBUG=true
+APP_ENV=local
+```
+
+### Health Check
+```bash
+# Run system health check
+php scripts/health-check.php
+```
+
+This will verify:
+- PHP version and extensions
+- Directory permissions
+- Database connection
+- Cache system
+- API connections
