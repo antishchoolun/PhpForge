@@ -1,6 +1,8 @@
 /**
  * Code Generator functionality
  */
+import { showError } from './errorHandler';
+
 export function initCodeGenerator() {
     const form = document.getElementById('code-generator-form');
     const generateBtn = document.getElementById('generate-code-btn');
@@ -48,8 +50,10 @@ export function initCodeGenerator() {
 
             const result = await response.json();
 
+            // Handle error responses
             if (!result.success) {
-                throw new Error(result.error || 'Failed to generate code');
+                showError(result);
+                return;
             }
 
             // Artificial delay for the quantum animation (minimum 2 seconds)
@@ -79,7 +83,10 @@ export function initCodeGenerator() {
             showNotification('Code generated successfully!', 'success');
 
         } catch (error) {
-            showNotification(error.message, 'error');
+            showError({
+                type: 'error',
+                message: error.message || 'An unexpected error occurred'
+            });
         } finally {
             // Hide quantum loader
             window.dispatchEvent(new CustomEvent('code-generated'));
