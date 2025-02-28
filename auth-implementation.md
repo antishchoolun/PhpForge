@@ -51,7 +51,15 @@ CREATE TABLE guest_usage (
 - [x] Add registration prompts
 
 ### Testing
-- [ ] Guest usage limit tests
-- [ ] Auth flow tests
-- [ ] Usage reset tests
-- [ ] Integration tests
+- [x] Guest usage limit tests
+- [x] Auth flow tests
+- [x] Usage reset tests
+- [x] Integration tests
+
+### Test Coverage
+- Guest user can use tools within daily limits
+- Guest user cannot exceed daily limit
+- Usage counter resets after day
+- Registered users have unlimited access
+- Session handling and IP tracking
+- Database cleanup and test isolation
