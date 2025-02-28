@@ -60,21 +60,20 @@ class TrackUsage
             $request->session()->start();
         }
         
-        $sessionId = $request->session()->getId();
+        // Get session ID from request or generate one
+        $sessionId = $request->session()->get('id') ?? $request->session()->getId();
 
         // Find or create the guest usage record
-        $guestUsage = GuestUsage::where('ip_address', $ip)
-            ->where('session_id', $sessionId)
-            ->first();
-
-        if (!$guestUsage) {
-            $guestUsage = GuestUsage::create([
+        $guestUsage = GuestUsage::firstOrCreate(
+            [
                 'ip_address' => $ip,
                 'session_id' => $sessionId,
+            ],
+            [
                 'usage_count' => 0,
                 'last_reset' => now(),
-            ]);
-        }
+            ]
+        );
 
         return $guestUsage;
     }

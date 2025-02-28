@@ -14,28 +14,42 @@ class GuestUsageLimitTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * The test session ID.
+     */
+    protected string $sessionId;
+
     protected function setUp(): void
     {
         parent::setUp();
-        
-        // Enable session handling for testing
-        $this->withSession([]);
+
+        // Clear any existing guest usage records
+        GuestUsage::query()->delete();
+
+        $this->sessionId = 'test-session-' . now()->timestamp;
         
         // Register test route with middleware
-        Route::middleware(['web', TrackUsage::class])
-            ->post('/test/generate', [TestController::class, 'generate'])
-            ->name('test.generate');
+        Route::post('/test/generate', function () {
+            return response()->json(['status' => 'success']);
+        })->middleware(['web', TrackUsage::class]);
+    }
+
+    protected function tearDown(): void
+    {
+        // Clean up after each test
+        GuestUsage::query()->delete();
+        parent::tearDown();
     }
 
     public function test_guest_can_use_tools_within_limits(): void
     {
-        $response = $this->postJson('/test/generate', [
-            'prompt' => 'Test prompt'
-        ]);
+        $response = $this->withSession(['id' => $this->sessionId])
+            ->postJson('/test/generate', ['prompt' => 'Test prompt']);
 
-        $response->assertStatus(200);
+        $response->assertOk();
         
-        $guestUsage = GuestUsage::first();
+        $guestUsage = GuestUsage::where('session_id', $this->sessionId)->first();
+        $this->assertNotNull($guestUsage);
         $this->assertEquals(1, $guestUsage->usage_count);
     }
 
@@ -44,14 +58,13 @@ class GuestUsageLimitTest extends TestCase
         // Create a guest that has reached the limit
         GuestUsage::create([
             'ip_address' => '127.0.0.1',
-            'session_id' => session()->getId(),
+            'session_id' => $this->sessionId,
             'usage_count' => 5,
             'last_reset' => now(),
         ]);
 
-        $response = $this->postJson('/test/generate', [
-            'prompt' => 'Test prompt'
-        ]);
+        $response = $this->withSession(['id' => $this->sessionId])
+            ->postJson('/test/generate', ['prompt' => 'Test prompt']);
 
         $response->assertStatus(429)
             ->assertJsonStructure([
@@ -66,16 +79,15 @@ class GuestUsageLimitTest extends TestCase
         // Create a guest with yesterday's usage
         $guestUsage = GuestUsage::create([
             'ip_address' => '127.0.0.1',
-            'session_id' => session()->getId(),
+            'session_id' => $this->sessionId,
             'usage_count' => 5,
             'last_reset' => now()->subDay(),
         ]);
 
-        $response = $this->postJson('/test/generate', [
-            'prompt' => 'Test prompt'
-        ]);
+        $response = $this->withSession(['id' => $this->sessionId])
+            ->postJson('/test/generate', ['prompt' => 'Test prompt']);
 
-        $response->assertStatus(200);
+        $response->assertOk();
         
         $guestUsage->refresh();
         $this->assertEquals(1, $guestUsage->usage_count);
@@ -84,12 +96,11 @@ class GuestUsageLimitTest extends TestCase
 
     public function test_registered_users_have_unlimited_access(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['last_used_at' => null]);
 
         $response = $this->actingAs($user)
-            ->postJson('/test/generate', [
-                'prompt' => 'Test prompt'
-            ]);
+            ->withSession(['id' => $this->sessionId])
+            ->postJson('/test/generate', ['prompt' => 'Test prompt']);
 
         $response->assertStatus(200);
         
