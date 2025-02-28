@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CodeGeneratorController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\TrackUsage;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +36,9 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Tool routes
-Route::post('/tools/generate', [CodeGeneratorController::class, 'generate'])->name('tools.generate');
+Route::post('/tools/generate', [CodeGeneratorController::class, 'generate'])
+    ->middleware(TrackUsage::class)
+    ->name('tools.generate');
 
 // Protected tool routes
 Route::middleware('track.usage')->group(function () {
