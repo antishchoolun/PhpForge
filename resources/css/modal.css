@@ -1,4 +1,4 @@
-/* Modal Styles */
+/* Modal Base Styles */
 .modal {
     position: fixed;
     top: 0;
@@ -13,7 +13,7 @@
     z-index: 1000;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s;
+    transition: opacity 0.3s ease;
 }
 
 .modal.active {
@@ -21,403 +21,124 @@
     pointer-events: all;
 }
 
+/* Modal Animation */
 .modal-content {
-    background: var(--card-bg);
-    backdrop-filter: blur(10px);
-    border-radius: 16px;
-    width: 90%;
-    max-width: 900px;
-    padding: 2rem;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
-    transform: scale(0.9);
-    transition: transform 0.3s;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    max-height: 90vh;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
 }
 
 .modal.active .modal-content {
     transform: scale(1);
 }
 
-.modal-header {
-    position: sticky;
-    top: 0;
-    background: var(--card-bg);
-    z-index: 10;
-    padding: 1rem 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
+/* Code Syntax Highlighting */
+.language-php {
+    color: #f8f8f2;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.3);
 }
 
-.modal-header h2 {
-    font-size: 1.8rem;
-    color: var(--text-color, #fff);
+.language-php .token.comment,
+.language-php .token.prolog,
+.language-php .token.doctype,
+.language-php .token.cdata {
+    color: #8292a2;
 }
 
-.close-modal {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: var(--gray);
-    transition: color 0.2s;
+.language-php .token.punctuation {
+    color: #f8f8f2;
 }
 
-.close-modal:hover {
-    color: var(--danger);
+.language-php .token.namespace {
+    opacity: .7;
 }
 
-/* Tool Interface */
-.tool-interface {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    flex: 1;
-    min-height: 0;
-    padding-right: 0.5rem;
+.language-php .token.property,
+.language-php .token.tag,
+.language-php .token.constant,
+.language-php .token.symbol,
+.language-php .token.deleted {
+    color: #ff79c6;
 }
 
-.input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+.language-php .token.boolean,
+.language-php .token.number {
+    color: #bd93f9;
 }
 
-.input-group label {
-    font-weight: 500;
-    font-size: 0.9rem;
-    color: var(--text-color, #fff);
+.language-php .token.selector,
+.language-php .token.attr-name,
+.language-php .token.string,
+.language-php .token.char,
+.language-php .token.builtin,
+.language-php .token.inserted {
+    color: #50fa7b;
 }
 
-.input-control {
-    padding: 0.8rem 1rem;
-    border-radius: 8px;
-    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
-    background: var(--input-bg, rgba(0, 0, 0, 0.2));
-    color: var(--text-color, #fff);
-    font-size: 1rem;
-    transition: all 0.2s;
+.language-php .token.operator,
+.language-php .token.entity,
+.language-php .token.url,
+.language-php .language-css .token.string,
+.language-php .style .token.string,
+.language-php .token.variable {
+    color: #f8f8f2;
 }
 
-.input-control:focus {
-    outline: none;
-    border-color: var(--primary);
-    background: var(--input-focus-bg, rgba(0, 0, 0, 0.3));
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+.language-php .token.atrule,
+.language-php .token.attr-value,
+.language-php .token.function,
+.language-php .token.class-name {
+    color: #f1fa8c;
 }
 
-.input-control::placeholder {
-    color: var(--text-muted, rgba(255, 255, 255, 0.5));
+.language-php .token.keyword {
+    color: #ff79c6;
 }
 
-textarea.input-control {
-    min-height: 150px;
-    resize: vertical;
+.language-php .token.regex,
+.language-php .token.important {
+    color: #ffb86c;
 }
 
-select.input-control {
-    appearance: none;
-    padding-right: 2.5rem;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 0.7rem center;
-    background-size: 1.2rem;
+.language-php .token.important,
+.language-php .token.bold {
+    font-weight: bold;
 }
 
-select.input-control option {
-    background: var(--card-bg);
-    color: var(--text-color, #fff);
+.language-php .token.italic {
+    font-style: italic;
 }
 
-/* Radio Group */
-.radio-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 0.5rem;
+/* Custom Scrollbar */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(156, 163, 175, 0.3) transparent;
 }
 
-.radio-label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-}
-
-input[type="radio"] {
-    appearance: none;
-    width: 1.2rem;
-    height: 1.2rem;
-    border: 2px solid var(--border-color, rgba(255, 255, 255, 0.1));
-    border-radius: 50%;
-    background: var(--input-bg, rgba(0, 0, 0, 0.2));
-    cursor: pointer;
-    position: relative;
-    margin: 0;
-}
-
-input[type="radio"]:checked {
-    border-color: var(--primary);
-}
-
-input[type="radio"]:checked::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-    background: var(--primary);
-}
-
-input[type="radio"]:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-}
-
-.radio-text {
-    font-size: 0.9rem;
-    color: var(--text-color, #fff);
-}
-
-/* Checkbox Grid */
-.checkbox-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-top: 0.5rem;
-}
-
-.checkbox-label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-}
-
-input[type="checkbox"] {
-    appearance: none;
-    width: 1.2rem;
-    height: 1.2rem;
-    border: 2px solid var(--border-color, rgba(255, 255, 255, 0.1));
-    border-radius: 4px;
-    background: var(--input-bg, rgba(0, 0, 0, 0.2));
-    cursor: pointer;
-    position: relative;
-    margin: 0;
-}
-
-input[type="checkbox"]:checked {
-    background: var(--primary);
-    border-color: var(--primary);
-}
-
-input[type="checkbox"]:checked::after {
-    content: '';
-    position: absolute;
-    left: 4px;
-    top: 1px;
+.custom-scrollbar::-webkit-scrollbar {
     width: 6px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
+    height: 6px;
 }
 
-input[type="checkbox"]:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
 }
 
-.checkbox-text {
-    font-size: 0.9rem;
-    color: var(--text-color, #fff);
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(156, 163, 175, 0.3);
+    border-radius: 3px;
 }
 
-/* Version Selector */
-.version-selector {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 1rem;
-    margin-top: 0.5rem;
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(156, 163, 175, 0.5);
 }
 
-.version-option {
-    cursor: pointer;
-}
-
-.version-option input[type="radio"] {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.version-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
-    background: var(--input-bg, rgba(0, 0, 0, 0.2));
-    border: 2px solid var(--border-color, rgba(255, 255, 255, 0.1));
-    border-radius: 8px;
-    transition: all 0.2s;
-}
-
-.version-option input[type="radio"]:checked + .version-box {
-    background: var(--primary-transparent, rgba(99, 102, 241, 0.1));
-    border-color: var(--primary);
-}
-
-.version-option input[type="radio"]:focus + .version-box {
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-}
-
-.version-number {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--primary);
-}
-
-.version-feature {
-    font-size: 0.8rem;
-    color: var(--text-muted, rgba(255, 255, 255, 0.5));
-    margin-top: 0.25rem;
-    text-align: center;
-}
-
-/* Group Spacing */
-.patterns-group,
-.version-group {
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
-}
-
-/* Code Result */
-.code-result {
-    margin-top: 1.5rem;
-    max-height: 60vh;
-    overflow-y: auto;
-    border-radius: 8px;
-    background: var(--card-bg);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.code-area {
-    position: relative;
-    background: var(--code-bg, #1e1e1e);
-    border-radius: 8px 8px 0 0;
-    overflow: hidden;
-}
-
-.code-area-tools {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    display: flex;
-    gap: 0.5rem;
-    z-index: 10;
-}
-
-.code-area-tools button {
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    border-radius: 4px;
-    padding: 0.4rem;
-    color: #fff;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.code-area-tools button:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-.code-area pre {
-    margin: 0;
-    padding: 2rem;
-    overflow-x: auto;
-    font-family: 'Fira Code', monospace;
-    font-size: 0.9rem;
-    line-height: 1.5;
-}
-
-.code-area code {
-    color: #fff;
-}
-
-.console {
-    background: var(--card-bg);
-    border-radius: 0 0 8px 8px;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.console-header {
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    font-weight: 500;
-    color: var(--text-color, #fff);
-}
-
-.console-content {
-    padding: 1rem;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-.console-line {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-    color: var(--text-color, #fff);
-}
-
-.console-prefix {
-    color: var(--success);
-}
-
-/* Loading State */
-.spinner {
-    display: inline-block;
-    width: 1rem;
-    height: 1rem;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    border-top-color: #fff;
-    animation: spin 1s linear infinite;
-    margin-right: 0.5rem;
-}
-
+/* Loading Animation */
 @keyframes spin {
     to {
         transform: rotate(360deg);
     }
 }
 
-/* Responsive Modal */
-@media (max-width: 768px) {
-    .modal-content {
-        width: 95%;
-        padding: 1rem;
-        margin: 1rem;
-    }
-    
-    .modal-header h2 {
-        font-size: 1.5rem;
-    }
-
-    .checkbox-grid,
-    .version-selector {
-        grid-template-columns: 1fr;
-    }
+.spinner {
+    animation: spin 1s linear infinite;
 }
