@@ -16,6 +16,7 @@ class GuestUsage extends Model
     protected $fillable = [
         'ip_address',
         'session_id',
+        'fingerprint',
         'usage_count',
         'last_reset',
     ];

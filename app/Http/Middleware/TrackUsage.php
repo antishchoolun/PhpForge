@@ -46,9 +46,26 @@ class TrackUsage
         return $response;
     }
 
+    protected function generateFingerprint(Request $request)
+    {
+        // Collect browser data
+        $data = [
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'accept_language' => $request->header('Accept-Language'),
+            'accept_encoding' => $request->header('Accept-Encoding'),
+            'accept' => $request->header('Accept'),
+            'connection' => $request->header('Connection'),
+        ];
+
+        // Generate a unique fingerprint
+        return hash('sha256', json_encode($data));
+    }
+
     protected function getOrCreateGuestUsage(Request $request)
     {
         $ip = $request->ip();
+        $fingerprint = $this->generateFingerprint($request);
         
         // Ensure session is started
         if (!$request->hasSession()) {
@@ -63,20 +80,45 @@ class TrackUsage
         // Get session ID from request or generate one
         $sessionId = $request->session()->get('id') ?? $request->session()->getId();
 
-        // Find or create the guest usage record
-        $guestUsage = GuestUsage::firstOrCreate(
-            [
+        // Find by both IP and fingerprint to prevent private browsing bypass
+        $guestUsage = GuestUsage::where('ip_address', $ip)
+            ->where('fingerprint', $fingerprint)
+            ->first();
+
+        if (!$guestUsage) {
+            // Check if IP or fingerprint has been used today
+            $existingUsage = GuestUsage::where(function ($query) use ($ip, $fingerprint) {
+                $query->where('ip_address', $ip)
+                    ->orWhere('fingerprint', $fingerprint);
+            })
+            ->whereDate('last_reset', today())
+            ->first();
+
+            if ($existingUsage) {
+                return $existingUsage;
+            }
+
+            // Create new record if none found
+            $guestUsage = GuestUsage::create([
                 'ip_address' => $ip,
                 'session_id' => $sessionId,
-            ],
-            [
+                'fingerprint' => $fingerprint,
                 'usage_count' => 0,
                 'last_reset' => now(),
-            ]
-        );
+            ]);
+        }
 
         return $guestUsage;
     }
+
+    protected function isToolRoute(Request $request)
+    {
+        // Add all tool-related routes here
+        $toolRoutes = [
+            'tools/generate',
+            'tools/debug',
+            'tools/security',
+            'tools/optimize',
 
     protected function isToolRoute(Request $request)
     {
