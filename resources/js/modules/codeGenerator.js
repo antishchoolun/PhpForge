@@ -26,7 +26,7 @@ export function initCodeGenerator() {
         
         try {
             // Make API request
-            const response = await fetch('/tools/code-generator/generate', {
+            const response = await fetch('/tools/generate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

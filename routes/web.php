@@ -34,8 +34,10 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Tool routes (protected by TrackUsage middleware)
+// Tool routes
+Route::post('/tools/generate', [CodeGeneratorController::class, 'generate'])->name('tools.generate');
+
+// Protected tool routes
 Route::middleware('track.usage')->group(function () {
-    Route::post('/tools/generate', [CodeGeneratorController::class, 'generate'])->name('tools.generate');
-    // Add other tool routes here
+    // Add other tool routes here that need usage tracking
 });
