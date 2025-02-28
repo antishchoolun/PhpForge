@@ -53,9 +53,9 @@
                         </div>
                         <h3 class="text-xl font-bold mb-2 bg-gradient-to-r from-indigo-500 to-pink-500 bg-clip-text text-transparent">PHP Code Generator</h3>
                         <p class="text-gray-600 mb-4">Transform natural language into clean, efficient PHP code with a single prompt.</p>
-                        <a href="#" class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-lg hover:from-indigo-600 hover:to-indigo-700 transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-xl">
+                        <button onclick="openModal('code-generator')" class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-lg hover:from-indigo-600 hover:to-indigo-700 transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-xl">
                             Generate Code
-                        </a>
+                        </button>
                     </div>
                 </div>
 
@@ -160,4 +160,8 @@
         </div>
     </div>
 </div>
+
+<!-- Include modal -->
+@include('partials.modals.code-generator')
+
 @endsection
