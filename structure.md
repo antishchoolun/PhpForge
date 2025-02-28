@@ -4,189 +4,176 @@
 
 ```
 PhpForge/
-├── app/                  # Application core
-│   ├── Console/         # Artisan commands
-│   ├── Exceptions/      # Custom exceptions
-│   ├── Http/           # HTTP layer
-│   │   ├── Controllers/ # Laravel controllers
-│   │   └── Middleware/ # Custom middleware
-│   └── Models/         # Eloquent models
-├── bootstrap/           # Framework boot files
-├── config/              # Configuration files
-├── database/            # Database migrations/seeds
-├── public/              # Web root (shared hosting)
-│   ├── index.php       # Laravel entry point
-│   ├── assets/         # Compiled assets
-│   └── .htaccess       # Server configuration
+├── app/                     # Application core
+│   ├── Http/               # HTTP layer
+│   │   ├── Controllers/    # Controllers for tools
+│   │   └── Middleware/     # Request middleware
+│   ├── Models/             # Eloquent models
+│   └── Services/           # Core services
+│       ├── CodeGenerator/  # Code generation service
+│       └── GroqApi/        # Groq API integration
+├── bootstrap/              # Framework boot files
+├── config/                 # Configuration files
+├── database/              # Database files
+│   ├── migrations/        # Database migrations
+│   └── seeders/          # Database seeders
+├── public/               # Web root
+│   ├── build/           # Compiled assets
+│   └── index.php       # Entry point
 ├── resources/          # Frontend resources
-│   ├── views/          # Blade templates
-│   └── js/             # Vanilla JS components
-├── routes/             # Route definitions
-├── storage/            # Storage (logs, cache, etc)
-├── tests/              # PHPUnit tests
-├── vendor/             # Composer dependencies
-├── .env                # Environment variables
-├── .env.example        # Environment template
-├── .gitignore
-├── artisan             # Artisan CLI
-├── composer.json       # PHP dependencies
-└── composer.lock
+│   ├── css/           # Tailwind & custom CSS
+│   ├── js/            # JavaScript modules
+│   │   ├── modules/   # Feature-specific JS
+│   │   └── app.js     # Main JS entry
+│   └── views/         # Blade templates
+│       ├── layouts/   # Layout templates
+│       ├── partials/  # Reusable components
+│       └── tools/     # Tool-specific views
+├── routes/            # Route definitions
+├── storage/           # Logs and cache
+├── tests/            # Test suites
+├── composer.json     # PHP dependencies
+├── package.json      # Node dependencies
+└── vite.config.js    # Vite configuration
 ```
 
-## Architectural Components
+## Core Components
 
 ### 1. Frontend Architecture
-- **JavaScript Components**
-  - `resources/js/tools/` - Individual tool implementations
-  - `resources/js/core/` - Core functionality (API client, utilities)
-  - `resources/js/ui/` - UI components and interactions
+
+- **JavaScript Modules**
+  - `clipboard.js` - Copy to clipboard functionality
+  - `codeGenerator.js` - Code generation interface
+  - `modals.js` - Modal dialog management
 
 - **CSS Structure**
-  - Laravel Mix for CSS compilation
-  - Tailwind CSS utility classes
-  - Component-specific styles in Blade templates
-  - Shared hosting compatible asset pipeline
+  - Tailwind CSS for utility classes
+  - Custom components in `resources/css/`
+  - Vite for asset compilation
 
 ### 2. Backend Architecture
-- **Laravel Framework**
-  - Built-in routing system
-  - Eloquent ORM for database
-  - Service container and dependency injection
-  - Blade templating engine
-  - Artisan command-line interface
 
-- **Laravel Services**
-  - Service classes in app/Services
-  - Groq API integration via HTTP client
-  - Redis caching integration
-  - Laravel Sanctum for authentication
-  - Laravel Telescope for logging/monitoring
+- **Services**
+  - `CodeGeneratorService` - Handles code generation logic
+  - `GroqApiClient` - Manages Groq API communication
 
 - **Controllers**
-  - Request validation
-  - Service orchestration
-  - Response formatting
+  - `CodeGeneratorController` - Handles code generation requests
+  - `HomeController` - Manages main page rendering
 
 ### 3. Database Schema
 
 ```sql
 -- Users table
 CREATE TABLE users (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(50) UNIQUE NOT NULL,
+    id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    password VARCHAR(255) NOT NULL,
+    remember_token VARCHAR(100),
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
 );
 
--- Tools usage logging
-CREATE TABLE tool_logs (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT,
-    tool_name VARCHAR(50) NOT NULL,
-    input_data TEXT,
-    output_data TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+-- Cache table for Laravel's cache system
+CREATE TABLE cache (
+    key VARCHAR(255) NOT NULL,
+    value MEDIUMTEXT NOT NULL,
+    expiration INT NOT NULL,
+    PRIMARY KEY (key)
 );
 
--- API rate limiting
-CREATE TABLE api_requests (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT,
-    endpoint VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+-- Jobs table for queued tasks
+CREATE TABLE jobs (
+    id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    queue VARCHAR(255) NOT NULL,
+    payload LONGTEXT NOT NULL,
+    attempts TINYINT UNSIGNED NOT NULL,
+    reserved_at INT UNSIGNED NULL,
+    available_at INT UNSIGNED NOT NULL,
+    created_at INT UNSIGNED NOT NULL
 );
 ```
 
 ### 4. API Endpoints
 
+#### Code Generator
 ```
-/api/v1/
-├── auth/
-│   ├── login     POST
-│   ├── register  POST
-│   └── logout    POST
-├── tools/
-│   ├── generate    POST - Code generation
-│   ├── debug       POST - Debug code
-│   ├── security    POST - Security analysis
-│   ├── optimize    POST - Performance optimization
-│   ├── document    POST - Generate documentation
-│   └── evaluate    POST - Domain valuation
-└── user/
-    └── usage      GET  - Tool usage statistics
+POST /api/v1/tools/generate
+Request:
+{
+    "prompt": "string",      // Natural language description
+    "options": {
+        "comments": boolean, // Include comments
+        "types": boolean    // Include type hints
+    }
+}
+Response:
+{
+    "code": "string",       // Generated PHP code
+    "analysis": {
+        "suggestions": [],  // Improvement suggestions
+        "warnings": []      // Potential issues
+    }
+}
 ```
 
 ### 5. Security Measures
 
-- **Laravel Security**
-  - Form Request validation
-  - Eloquent ORM parameter binding
-  - Blade template auto-escaping
-  - CSRF tokens with @csrf directive
+- **Request Validation**
+  - Form request validation in controllers
+  - CSRF protection via Laravel middleware
+  - Rate limiting on API endpoints
 
-- **Authentication**
-  - Laravel Sanctum API authentication
-  - Laravel rate limiting middleware
-  - Encrypted session driver
-
-- **Data Protection**
-  - Laravel environment configuration
-  - Encrypted .env values
-  - Bcrypt password hashing
+- **API Security**
+  - Groq API key stored in `.env`
+  - Request signing for API calls
+  - Response validation and sanitization
 
 ### 6. Performance Optimization
 
-- **Frontend**
-  - Minified assets
-  - Lazy loading
-  - Browser caching
-  - Compressed images
+- **Asset Management**
+  - Vite for development and production builds
+  - Asset versioning for cache busting
+  - Lazy loading of JavaScript modules
 
-- **Backend**
-  - Eloquent eager loading
-  - Route caching
-  - Laravel Octane for performance
-  - Queue workers for heavy tasks
+- **Caching**
+  - Response caching for API calls
+  - Database query caching
+  - Route and config caching in production
 
-### 7. Deployment Strategy
+### 7. Testing
 
-- **Staging Process**
-  1. Local development
-  2. Staging environment
-  3. Production deployment
+- **Unit Tests**
+  - Service class testing
+  - Controller response testing
+  - API integration testing
 
-- **Deployment Checklist**
-  - Laravel Forge deployment
-  - Database migrations via Artisan
-  - Mix asset compilation
-  - Config and route caching
-  - Security headers middleware
+- **Feature Tests**
+  - End-to-end tool testing
+  - Authentication flow testing
+  - Error handling scenarios
 
-### 8. Monitoring and Logging
+### 8. Monitoring
 
 - **Error Logging**
-  - Application errors
-  - API request logs
-  - Security incidents
+  - Laravel's built-in logging
+  - Custom log channels for tools
+  - API call logging for debugging
 
-- **Performance Monitoring**
-  - Response times
-  - Resource usage
-  - API quota usage
-  - User activity
+- **Performance Tracking**
+  - Response time monitoring
+  - API usage tracking
+  - Error rate monitoring
 
-### 9. Scaling Considerations
+### 9. Deployment
 
-- **Horizontal Scaling**
-  - Stateless application design
-  - Session management
-  - Cache synchronization
+- **Environment Setup**
+  - Production-ready `.env.example`
+  - Secure environment configuration
+  - Proper file permissions
 
-- **Resource Management**
-  - Database connection pooling
-  - File system optimization
-  - Memory usage monitoring
+- **Build Process**
+  - Composer optimization
+  - Node.js asset compilation
+  - Cache warming
