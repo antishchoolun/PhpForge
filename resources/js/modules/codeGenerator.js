@@ -32,6 +32,8 @@ export function initCodeGenerator() {
         generateBtn.disabled = true;
         
         try {
+            //console.log('Sending request to generate code...');
+            
             // Make API request
             const response = await fetch('/tools/generate', {
                 method: 'POST',
@@ -49,9 +51,11 @@ export function initCodeGenerator() {
             });
 
             const result = await response.json();
+            //console.log('API Response:', result);
 
             // Handle error responses
             if (!result.success) {
+                //console.log('Error detected in response');
                 showError(result);
                 return;
             }
@@ -83,9 +87,9 @@ export function initCodeGenerator() {
             showNotification('Code generated successfully!', 'success');
 
         } catch (error) {
+            //console.error('Error generating code:', error);
             showError({
-                type: 'error',
-                message: error.message || 'An unexpected error occurred'
+                message: error.message || 'An unexpected error occurred while generating code'
             });
         } finally {
             // Hide quantum loader
