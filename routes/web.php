@@ -16,6 +16,13 @@ Route::get('/pricing', function () {
     return view('pricing');
 })->name('pricing');
 
+// Protected routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
+
 // Tool routes (protected by TrackUsage middleware)
 Route::middleware('track.usage')->group(function () {
     Route::post('/tools/generate', [CodeGeneratorController::class, 'generate'])->name('tools.generate');
