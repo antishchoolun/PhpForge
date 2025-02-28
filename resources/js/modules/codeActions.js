@@ -19,8 +19,13 @@ export default function codeActions(config) {
 
             try {
                 await navigator.clipboard.writeText(codeElement.textContent);
-                this.showSuccess('copy');
+                this.copied = true;
                 this.showNotification('Code copied to clipboard!', 'success');
+                
+                // Reset icon after 2 seconds
+                setTimeout(() => {
+                    this.copied = false;
+                }, 2000);
             } catch (err) {
                 this.showNotification('Failed to copy code', 'error');
             }
@@ -44,23 +49,15 @@ export default function codeActions(config) {
                 document.body.removeChild(a);
                 window.URL.revokeObjectURL(url);
 
-                this.showSuccess('download');
+                this.downloaded = true;
                 this.showNotification('Code downloaded successfully!', 'success');
+                
+                // Reset icon after 2 seconds
+                setTimeout(() => {
+                    this.downloaded = false;
+                }, 2000);
             } catch (err) {
                 this.showNotification('Failed to download code', 'error');
-            }
-        },
-
-        /**
-         * Show success state
-         */
-        showSuccess(type) {
-            if (type === 'copy') {
-                this.copied = true;
-                setTimeout(() => this.copied = false, 1000);
-            } else if (type === 'download') {
-                this.downloaded = true;
-                setTimeout(() => this.downloaded = false, 1000);
             }
         },
 
