@@ -14,9 +14,11 @@ export function initCodeGenerator() {
         
         // Get form data
         const prompt = document.getElementById('code-prompt').value;
-        const language = document.getElementById('language').value;
-        const options = Array.from(form.querySelectorAll('input[name="options[]"]:checked'))
+        const framework = document.getElementById('framework').value;
+        const component = form.querySelector('input[name="component"]:checked').value;
+        const patterns = Array.from(form.querySelectorAll('input[name="patterns[]"]:checked'))
             .map(checkbox => checkbox.value);
+        const phpVersion = form.querySelector('input[name="php_version"]:checked').value;
         
         // Show loading state
         generateBtn.innerHTML = '<span class="spinner"></span> Generating...';
@@ -32,8 +34,10 @@ export function initCodeGenerator() {
                 },
                 body: JSON.stringify({
                     prompt,
-                    language,
-                    options
+                    framework,
+                    component,
+                    patterns,
+                    phpVersion
                 })
             });
 

@@ -24,9 +24,11 @@ class CodeGeneratorController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'prompt' => 'required|string|min:10',
-            'language' => 'required|string|in:php,javascript,python,java,cpp,csharp',
-            'options' => 'nullable|array',
-            'options.*' => 'string|in:comments,error_handling,psr12,type_hints'
+            'framework' => 'required|string|in:raw,laravel,symfony,wordpress,codeigniter',
+            'component' => 'required|string|in:controller,model,service,repository,middleware',
+            'patterns' => 'nullable|array',
+            'patterns.*' => 'string|in:crud,repository,service,factory,dependency',
+            'phpVersion' => 'required|string|in:7.4,8.0,8.1,8.2'
         ]);
         
         if ($validator->fails()) {
@@ -38,8 +40,12 @@ class CodeGeneratorController extends Controller
         
         $result = $this->codeGenerator->generateCode(
             $request->input('prompt'),
-            $request->input('language'),
-            $request->input('options', [])
+            [
+                'framework' => $request->input('framework'),
+                'component' => $request->input('component'),
+                'patterns' => $request->input('patterns', []),
+                'phpVersion' => $request->input('phpVersion')
+            ]
         );
         
         return response()->json($result);

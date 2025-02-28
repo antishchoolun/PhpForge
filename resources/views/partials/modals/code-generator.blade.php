@@ -13,15 +13,100 @@
                         placeholder="Example: Create a PHP function that connects to a MySQL database and fetches all users from a 'users' table"></textarea>
                 </div>
                 <div class="input-group">
-                    <label for="language">Programming Language:</label>
-                    <select id="language" name="language" class="input-control" required>
-                        <option value="php">PHP</option>
-                        <option value="javascript">JavaScript</option>
-                        <option value="python">Python</option>
-                        <option value="java">Java</option>
-                        <option value="cpp">C++</option>
-                        <option value="csharp">C#</option>
+                    <label for="framework">Framework/Platform:</label>
+                    <select id="framework" name="framework" class="input-control" required>
+                        <option value="raw">Raw PHP</option>
+                        <option value="laravel">Laravel</option>
+                        <option value="symfony">Symfony</option>
+                        <option value="wordpress">WordPress</option>
+                        <option value="codeigniter">CodeIgniter</option>
                     </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Component Type:</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="component" value="controller" checked>
+                            <span class="radio-text">Controller</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="component" value="model">
+                            <span class="radio-text">Model</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="component" value="service">
+                            <span class="radio-text">Service</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="component" value="repository">
+                            <span class="radio-text">Repository</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="component" value="middleware">
+                            <span class="radio-text">Middleware</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="input-group patterns-group">
+                    <label>Design Patterns to Include:</label>
+                    <div class="checkbox-grid">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="patterns[]" value="crud">
+                            <span class="checkbox-text">CRUD Operations</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="patterns[]" value="repository">
+                            <span class="checkbox-text">Repository Pattern</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="patterns[]" value="service">
+                            <span class="checkbox-text">Service Layer</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="patterns[]" value="factory">
+                            <span class="checkbox-text">Factory Pattern</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="patterns[]" value="dependency">
+                            <span class="checkbox-text">Dependency Injection</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="input-group version-group">
+                    <label>PHP Version Features:</label>
+                    <div class="version-selector">
+                        <label class="version-option">
+                            <input type="radio" name="php_version" value="7.4">
+                            <span class="version-box">
+                                <span class="version-number">7.4</span>
+                                <span class="version-feature">Typed Properties</span>
+                            </span>
+                        </label>
+                        <label class="version-option">
+                            <input type="radio" name="php_version" value="8.0">
+                            <span class="version-box">
+                                <span class="version-number">8.0</span>
+                                <span class="version-feature">Constructor Props</span>
+                            </span>
+                        </label>
+                        <label class="version-option">
+                            <input type="radio" name="php_version" value="8.1" checked>
+                            <span class="version-box">
+                                <span class="version-number">8.1</span>
+                                <span class="version-feature">Enums & More</span>
+                            </span>
+                        </label>
+                        <label class="version-option">
+                            <input type="radio" name="php_version" value="8.2">
+                            <span class="version-box">
+                                <span class="version-number">8.2</span>
+                                <span class="version-feature">Readonly Classes</span>
+                            </span>
+                        </label>
+                    </div>
                 </div>
                 <div class="input-group">
                     <label>Additional Options:</label>

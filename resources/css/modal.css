@@ -32,6 +32,10 @@
     transform: scale(0.9);
     transition: transform 0.3s;
     border: 1px solid rgba(255, 255, 255, 0.4);
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .modal.active .modal-content {
@@ -39,6 +43,11 @@
 }
 
 .modal-header {
+    position: sticky;
+    top: 0;
+    background: var(--card-bg);
+    z-index: 10;
+    padding: 1rem 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -47,6 +56,7 @@
 
 .modal-header h2 {
     font-size: 1.8rem;
+    color: var(--text-color, #fff);
 }
 
 .close-modal {
@@ -72,52 +82,6 @@
     padding-right: 0.5rem;
 }
 
-/* Loading State */
-.spinner {
-    display: inline-block;
-    width: 1rem;
-    height: 1rem;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    border-top-color: #fff;
-    animation: spin 1s linear infinite;
-    margin-right: 0.5rem;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* Scrollbar Styling */
-.modal-content::-webkit-scrollbar,
-.code-result::-webkit-scrollbar,
-.console-content::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-.modal-content::-webkit-scrollbar-track,
-.code-result::-webkit-scrollbar-track,
-.console-content::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-}
-
-.modal-content::-webkit-scrollbar-thumb,
-.code-result::-webkit-scrollbar-thumb,
-.console-content::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-}
-
-.modal-content::-webkit-scrollbar-thumb:hover,
-.code-result::-webkit-scrollbar-thumb:hover,
-.console-content::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.3);
-}
-
 .input-group {
     display: flex;
     flex-direction: column;
@@ -127,6 +91,7 @@
 .input-group label {
     font-weight: 500;
     font-size: 0.9rem;
+    color: var(--text-color, #fff);
 }
 
 .input-control {
@@ -169,7 +134,74 @@ select.input-control option {
     color: var(--text-color, #fff);
 }
 
-/* Checkbox Styling */
+/* Radio Group */
+.radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+input[type="radio"] {
+    appearance: none;
+    width: 1.2rem;
+    height: 1.2rem;
+    border: 2px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    border-radius: 50%;
+    background: var(--input-bg, rgba(0, 0, 0, 0.2));
+    cursor: pointer;
+    position: relative;
+    margin: 0;
+}
+
+input[type="radio"]:checked {
+    border-color: var(--primary);
+}
+
+input[type="radio"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--primary);
+}
+
+input[type="radio"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.radio-text {
+    font-size: 0.9rem;
+    color: var(--text-color, #fff);
+}
+
+/* Checkbox Grid */
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
 input[type="checkbox"] {
     appearance: none;
     width: 1.2rem;
@@ -188,7 +220,7 @@ input[type="checkbox"]:checked {
 }
 
 input[type="checkbox"]:checked::after {
-    content: "";
+    content: '';
     position: absolute;
     left: 4px;
     top: 1px;
@@ -202,6 +234,71 @@ input[type="checkbox"]:checked::after {
 input[type="checkbox"]:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.checkbox-text {
+    font-size: 0.9rem;
+    color: var(--text-color, #fff);
+}
+
+/* Version Selector */
+.version-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.version-option {
+    cursor: pointer;
+}
+
+.version-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.version-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    background: var(--input-bg, rgba(0, 0, 0, 0.2));
+    border: 2px solid var(--border-color, rgba(255, 255, 255, 0.1));
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.version-option input[type="radio"]:checked + .version-box {
+    background: var(--primary-transparent, rgba(99, 102, 241, 0.1));
+    border-color: var(--primary);
+}
+
+.version-option input[type="radio"]:focus + .version-box {
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.version-number {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.version-feature {
+    font-size: 0.8rem;
+    color: var(--text-muted, rgba(255, 255, 255, 0.5));
+    margin-top: 0.25rem;
+    text-align: center;
+}
+
+/* Group Spacing */
+.patterns-group,
+.version-group {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
 }
 
 /* Code Result */
@@ -248,7 +345,7 @@ input[type="checkbox"]:focus {
     margin: 0;
     padding: 2rem;
     overflow-x: auto;
-    font-family: "Fira Code", monospace;
+    font-family: 'Fira Code', monospace;
     font-size: 0.9rem;
     line-height: 1.5;
 }
@@ -267,6 +364,7 @@ input[type="checkbox"]:focus {
     padding: 0.75rem 1rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     font-weight: 500;
+    color: var(--text-color, #fff);
 }
 
 .console-content {
@@ -281,25 +379,29 @@ input[type="checkbox"]:focus {
     gap: 0.5rem;
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
+    color: var(--text-color, #fff);
 }
 
 .console-prefix {
     color: var(--success);
 }
 
-/* Modal Content Scroll */
-.modal-content {
-    max-height: 90vh;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
+/* Loading State */
+.spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s linear infinite;
+    margin-right: 0.5rem;
 }
 
-.modal-header {
-    top: 0;
-    background: var(--card-bg);
-    z-index: 10;
-    padding: 1rem 0;
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* Responsive Modal */
@@ -309,8 +411,13 @@ input[type="checkbox"]:focus {
         padding: 1rem;
         margin: 1rem;
     }
-
+    
     .modal-header h2 {
         font-size: 1.5rem;
+    }
+
+    .checkbox-grid,
+    .version-selector {
+        grid-template-columns: 1fr;
     }
 }
