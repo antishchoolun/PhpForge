@@ -198,4 +198,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Quantum Loader -->
+    <div x-data="{ show: false }" x-show="show" x-on:generating-code.window="show = true" x-on:code-generated.window="show = false">
+        <x-quantum-loader message="Quantum AI is generating your code..." />
+    </div>
 </div>

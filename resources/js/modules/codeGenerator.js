@@ -21,7 +21,11 @@ export function initCodeGenerator() {
             .map(checkbox => checkbox.value);
         const phpVersion = form.querySelector('input[name="php_version"]:checked').value;
         
+        // Show quantum loader
+        window.dispatchEvent(new CustomEvent('generating-code'));
+        
         // Show loading state
+        const originalBtnText = generateBtn.innerHTML;
         generateBtn.innerHTML = '<span class="spinner"></span> Generating...';
         generateBtn.disabled = true;
         
@@ -47,6 +51,9 @@ export function initCodeGenerator() {
             if (!result.success) {
                 throw new Error(result.error || 'Failed to generate code');
             }
+
+            // Artificial delay for the quantum animation (minimum 2 seconds)
+            await new Promise(resolve => setTimeout(resolve, 2000));
 
             // Update code display
             const codeElement = document.getElementById('generated-code');
@@ -74,8 +81,11 @@ export function initCodeGenerator() {
         } catch (error) {
             showNotification(error.message, 'error');
         } finally {
+            // Hide quantum loader
+            window.dispatchEvent(new CustomEvent('code-generated'));
+            
             // Reset button state
-            generateBtn.innerHTML = 'Generate Code';
+            generateBtn.innerHTML = originalBtnText;
             generateBtn.disabled = false;
         }
     });
