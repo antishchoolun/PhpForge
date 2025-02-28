@@ -35,6 +35,9 @@
 .language-php {
     color: #f8f8f2;
     text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    min-width: min-content;
+    overflow: auto;
 }
 
 .language-php .token.comment,
@@ -130,6 +133,10 @@
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background-color: rgba(156, 163, 175, 0.5);
+}
+
+.custom-scrollbar::-webkit-scrollbar-corner {
+    background: transparent;
 }
 
 /* Loading Animation */

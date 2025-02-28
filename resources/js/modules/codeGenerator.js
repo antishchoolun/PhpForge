@@ -5,6 +5,7 @@ export function initCodeGenerator() {
     const form = document.getElementById('code-generator-form');
     const generateBtn = document.getElementById('generate-code-btn');
     const codeResult = document.getElementById('code-result');
+    const mainContent = document.querySelector('.modal-content > .h-full > div:nth-child(2)');
     
     if (!form || !generateBtn) return;
 
@@ -54,20 +55,17 @@ export function initCodeGenerator() {
                 
                 // Show the result container
                 if (codeResult) {
-                    codeResult.style.display = 'block';
+                    // Update classes for visibility
+                    codeResult.classList.remove('hidden');
+                    mainContent.classList.remove('grid-cols-1');
+                    mainContent.classList.add('flex', 'flex-row');
                     
                     // Update analysis based on code characteristics
-                    const analysisContent = generateAnalysis(result.code, language);
+                    const analysisContent = generateAnalysis(result.code, 'php');
                     const consoleContent = document.querySelector('.console-content');
                     if (consoleContent) {
                         consoleContent.innerHTML = analysisContent;
                     }
-
-                    // Scroll to result
-                    codeResult.scrollIntoView({ 
-                        behavior: 'smooth',
-                        block: 'nearest'
-                    });
                 }
             }
 
