@@ -1,32 +1,38 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    <title>{{ config('app.name') }} - @yield('title', 'AI-Powered PHP Tools')</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Satoshi:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
+    <!-- Custom Styles -->
+    @stack('styles')
+</head>
+<body class="antialiased">
+    <div class="min-h-screen">
+        <div class="container">
+            @include('partials.header')
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+            <main>
+                @yield('content')
+            </main>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+            @include('partials.footer')
+        </div>
+    </div>
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased min-h-screen bg-gray-100">
-        @include('partials.header')
+    <!-- Notification Container -->
+    <div id="notification-container" class="fixed top-4 right-4 z-50"></div>
 
-        <main class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                @isset($slot)
-                    {{ $slot }}
-                @else
-                    @yield('content')
-                @endisset
-            </div>
-        </main>
-
-        @include('partials.footer')
-    </body>
+    <!-- Scripts -->
+    @stack('scripts')
+</body>
 </html>
