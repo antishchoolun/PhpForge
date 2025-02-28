@@ -22,7 +22,7 @@
             <!-- Main Content -->
             <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 h-[calc(100vh-4rem)] overflow-hidden">
                 <!-- Left Side - Form -->
-                <div class="bg-gray-50 dark:bg-gray-900 overflow-y-auto p-6">
+                <div class="bg-gray-50 dark:bg-gray-900 overflow-y-auto p-6 custom-scrollbar">
                     <form id="code-generator-form" class="max-w-2xl mx-auto space-y-8">
                         <input type="hidden" id="language" value="php">
                         
@@ -33,7 +33,9 @@
                             </label>
                             <div class="relative">
                                 <textarea id="code-prompt" name="prompt" rows="4" 
-                                    class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent transition-shadow"
+                                    class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl 
+                                    focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent transition-shadow
+                                    text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
                                     placeholder="Example: Create a PHP function that connects to a MySQL database and fetches all users from a 'users' table"
                                     required></textarea>
                                 <div class="absolute right-3 top-3">
@@ -47,7 +49,10 @@
                         <!-- Framework Selection -->
                         <div class="space-y-2">
                             <label for="framework" class="text-sm font-medium text-gray-700 dark:text-gray-300">Framework/Platform</label>
-                            <select id="framework" name="framework" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent transition-shadow appearance-none" required>
+                            <select id="framework" name="framework" 
+                                class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl 
+                                focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent transition-shadow
+                                text-gray-900 dark:text-gray-100 appearance-none" required>
                                 <option value="raw">Raw PHP</option>
                                 <option value="laravel">Laravel</option>
                                 <option value="symfony">Symfony</option>
@@ -177,7 +182,7 @@
                                         </svg>
                                     </button>
                                 </div>
-                                <pre class="h-full p-6 overflow-auto bg-gray-900"><code id="generated-code" class="language-php"></code></pre>
+                                <pre class="h-full p-6 overflow-auto custom-scrollbar bg-gray-900"><code id="generated-code" class="language-php text-gray-100"></code></pre>
                             </div>
                         </div>
 
@@ -191,7 +196,7 @@
                                     AI Analysis
                                 </h3>
                             </div>
-                            <div class="console-content p-4 max-h-60 overflow-y-auto space-y-3">
+                            <div class="console-content p-4 max-h-60 overflow-y-auto custom-scrollbar space-y-3">
                                 <!-- Analysis content will be dynamically inserted here -->
                             </div>
                         </div>
