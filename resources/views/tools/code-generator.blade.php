@@ -1,160 +1,107 @@
 @extends('layouts.app')
 
-@section('title', 'Code Generator')
-
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="bg-white rounded-lg shadow-sm p-6">
-        <h1 class="text-2xl font-bold text-gray-900 mb-6">Code Generator</h1>
-        
-        <form id="codeGeneratorForm" class="space-y-6">
-            @csrf
-            
-            <div>
-                <label for="prompt" class="block text-sm font-medium text-gray-700">
-                    What would you like to generate?
-                </label>
-                <div class="mt-1">
-                    <textarea
-                        id="prompt"
-                        name="prompt"
-                        rows="4"
-                        class="shadow-sm block w-full focus:ring-blue-500 focus:border-blue-500 sm:text-sm border border-gray-300 rounded-md"
-                        placeholder="Describe the code you want to generate..."
-                        required
-                    ></textarea>
+<div class="py-12">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="p-6 text-gray-900">
+                <h2 class="text-2xl font-semibold mb-4">Code Generator</h2>
+                
+                <div class="mb-6">
+                    <x-usage-counter class="mb-4" />
                 </div>
-            </div>
 
-            <div>
-                <label for="language" class="block text-sm font-medium text-gray-700">
-                    Programming Language
-                </label>
-                <select
-                    id="language"
-                    name="language"
-                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
-                >
-                    <option value="php">PHP</option>
-                    <option value="javascript">JavaScript</option>
-                    <option value="python">Python</option>
-                    <option value="java">Java</option>
-                    <option value="cpp">C++</option>
-                    <option value="csharp">C#</option>
-                </select>
-            </div>
-
-            <div class="flex justify-end">
-                <button
-                    type="submit"
-                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                    Generate Code
-                </button>
-            </div>
-        </form>
-
-        <div id="resultSection" class="mt-8 hidden">
-            <h2 class="text-lg font-medium text-gray-900 mb-4">Generated Code</h2>
-            <div class="relative">
-                <pre id="codeOutput" class="bg-gray-50 rounded-lg p-4 overflow-x-auto text-sm"></pre>
-                <button
-                    onclick="copyToClipboard()"
-                    class="absolute top-2 right-2 px-3 py-1 text-sm text-gray-600 hover:text-gray-900 bg-white rounded border shadow-sm"
-                >
-                    Copy
-                </button>
-            </div>
-        </div>
-
-        <div id="errorSection" class="mt-8 hidden">
-            <div class="bg-red-50 border-l-4 border-red-400 p-4">
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                        </svg>
+                <form id="generateForm" class="space-y-6">
+                    <div>
+                        <label for="prompt" class="block text-sm font-medium text-gray-700">What would you like to generate?</label>
+                        <div class="mt-1">
+                            <textarea id="prompt" name="prompt" rows="4"
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                placeholder="Example: Create a PHP class for handling file uploads with validation"></textarea>
+                        </div>
                     </div>
-                    <div class="ml-3">
-                        <h3 class="text-sm font-medium text-red-800">Error</h3>
-                        <div id="errorMessage" class="mt-2 text-sm text-red-700"></div>
+
+                    <div>
+                        <label for="language" class="block text-sm font-medium text-gray-700">Language</label>
+                        <select id="language" name="language"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                            <option value="php">PHP</option>
+                            <option value="sql">SQL</option>
+                            <option value="html">HTML</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-center justify-end">
+                        <button type="submit"
+                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Generate Code
+                        </button>
+                    </div>
+                </form>
+
+                <div id="result" class="mt-8 hidden">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Generated Code</h3>
+                    <div class="relative">
+                        <pre id="codeOutput" class="p-4 bg-gray-800 text-white rounded-lg overflow-x-auto"></pre>
+                        <button onclick="copyCode()" class="absolute top-2 right-2 p-2 bg-white rounded-md hover:bg-gray-100">
+                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                    d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-@endsection
 
 @push('scripts')
 <script>
-document.getElementById('codeGeneratorForm').addEventListener('submit', async function(e) {
+document.getElementById('generateForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
-    const form = e.target;
-    const submitButton = form.querySelector('button[type="submit"]');
-    const resultSection = document.getElementById('resultSection');
-    const errorSection = document.getElementById('errorSection');
-    const codeOutput = document.getElementById('codeOutput');
-    
-    // Update button state
+    const submitButton = this.querySelector('button[type="submit"]');
     submitButton.disabled = true;
     submitButton.innerHTML = 'Generating...';
-    
+
     try {
-        const response = await fetch('{{ route("tools.code-generator.generate") }}', {
+        const response = await fetch('{{ route("tools.generate.post") }}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             body: JSON.stringify({
-                prompt: form.prompt.value,
-                language: form.language.value
+                prompt: document.getElementById('prompt').value,
+                language: document.getElementById('language').value
             })
         });
-        
+
         const data = await response.json();
-        
-        if (data.success) {
-            codeOutput.textContent = data.code;
-            resultSection.classList.remove('hidden');
-            errorSection.classList.add('hidden');
+
+        if (response.ok) {
+            document.getElementById('result').classList.remove('hidden');
+            document.getElementById('codeOutput').textContent = data.code;
         } else {
-            document.getElementById('errorMessage').textContent = data.error;
-            errorSection.classList.remove('hidden');
-            resultSection.classList.add('hidden');
+            alert(data.message || 'An error occurred');
         }
     } catch (error) {
-        document.getElementById('errorMessage').textContent = 'An unexpected error occurred. Please try again.';
-        errorSection.classList.remove('hidden');
-        resultSection.classList.add('hidden');
+        alert('An error occurred while generating code');
+    } finally {
+        submitButton.disabled = false;
+        submitButton.innerHTML = 'Generate Code';
     }
-    
-    // Reset button state
-    submitButton.disabled = false;
-    submitButton.innerHTML = 'Generate Code';
 });
 
-function copyToClipboard() {
+function copyCode() {
     const code = document.getElementById('codeOutput').textContent;
     navigator.clipboard.writeText(code).then(() => {
-        const copyButton = document.querySelector('#codeOutput + button');
-        const originalText = copyButton.textContent;
-        copyButton.textContent = 'Copied!';
-        setTimeout(() => {
-            copyButton.textContent = originalText;
-        }, 2000);
+        alert('Code copied to clipboard!');
+    }).catch(() => {
+        alert('Failed to copy code');
     });
 }
 </script>
 @endpush
-
-@push('styles')
-<style>
-    pre {
-        white-space: pre-wrap;
-        word-wrap: break-word;
-    }
-</style>
-@endpush
+@endsection

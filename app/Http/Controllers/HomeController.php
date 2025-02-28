@@ -6,11 +6,12 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    /**
-     * Show the application homepage.
-     */
     public function index()
     {
+        if (auth()->check()) {
+            return redirect()->route('dashboard');
+        }
+
         return view('home');
     }
 }
