@@ -145,11 +145,13 @@ function generateAnalysis(code, language) {
             break;
     }
 
-    // Generate HTML for analysis
+    // Generate HTML for analysis with dark mode support
     return analysis.map(item => `
-        <div class="console-line">
-            <span class="console-prefix">${item.type === 'success' ? '✓' : 'ℹ'}</span>
-            <span>${item.message}</span>
+        <div class="console-line flex items-start gap-2 text-gray-700 dark:text-gray-300">
+            <span class="console-prefix flex-shrink-0 text-emerald-500">
+                ${item.type === 'success' ? '✓' : 'ℹ'}
+            </span>
+            <span class="flex-1">${item.message}</span>
         </div>
     `).join('');
 }
