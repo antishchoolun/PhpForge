@@ -79,46 +79,6 @@ export function initCodeGenerator() {
             generateBtn.disabled = false;
         }
     });
-
-    // Handle code copying
-    const copyBtn = document.querySelector('.code-area-tools button[title="Copy code"]');
-    if (copyBtn) {
-        copyBtn.addEventListener('click', () => {
-            const code = document.getElementById('generated-code');
-            if (code) {
-                navigator.clipboard.writeText(code.textContent)
-                    .then(() => showNotification('Code copied to clipboard!', 'success'))
-                    .catch(() => showNotification('Failed to copy code', 'error'));
-            }
-        });
-    }
-
-    // Handle code downloading
-    const downloadBtn = document.querySelector('.code-area-tools button[title="Download"]');
-    if (downloadBtn) {
-        downloadBtn.addEventListener('click', () => {
-            const code = document.getElementById('generated-code');
-            if (code) {
-                const language = document.getElementById('language').value;
-                const extensions = {
-                    php: '.php',
-                    javascript: '.js',
-                    python: '.py',
-                    java: '.java',
-                    cpp: '.cpp',
-                    csharp: '.cs'
-                };
-                
-                const blob = new Blob([code.textContent], { type: 'text/plain' });
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `generated-code${extensions[language] || '.txt'}`;
-                a.click();
-                window.URL.revokeObjectURL(url);
-            }
-        });
-    }
 }
 
 // Notification system
@@ -183,8 +143,6 @@ function generateAnalysis(code, language) {
                 });
             }
             break;
-            
-        // Add more language-specific checks as needed
     }
 
     // Generate HTML for analysis

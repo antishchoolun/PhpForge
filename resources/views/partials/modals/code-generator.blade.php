@@ -167,20 +167,13 @@
                     <div class="h-full flex flex-col">
                         <!-- Code Area -->
                         <div class="flex-1 overflow-hidden relative">
-                            <div class="absolute right-4 top-4 flex space-x-2 z-10">
-                                <button class="p-2 bg-gray-800/50 hover:bg-gray-800/70 rounded-lg backdrop-blur-lg transition-all"
-                                    title="Copy code">
-                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                                    </svg>
-                                </button>
-                                <button class="p-2 bg-gray-800/50 hover:bg-gray-800/70 rounded-lg backdrop-blur-lg transition-all"
-                                    title="Download">
-                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                    </svg>
-                                </button>
-                            </div>
+                            <!-- Code Actions Component -->
+                            <x-code-actions 
+                                target-id="generated-code"
+                                download-name="generated-code"
+                                download-ext=".php"
+                                position="top-right"
+                            />
                             <div class="h-full overflow-y-auto custom-scrollbar">
                                 <pre class="min-h-full p-6 bg-gray-900"><code id="generated-code" class="language-php text-gray-100"></code></pre>
                             </div>
