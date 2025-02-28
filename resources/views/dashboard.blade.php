@@ -20,23 +20,40 @@
                     </p>
                 </div>
 
+                <!-- Tools Section -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Tools</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <x-dashboard-card
+                            onClick="openModal('code-generator')"
+                            title="Code Generator"
+                            description="Generate PHP code with AI assistance"
+                        />
+                        <!-- Add more tools here as needed -->
+                    </div>
+                </div>
+
+                <!-- Quick Links Section -->
                 <div class="mt-8">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Quick Links</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <a href="{{ route('tools.generate') }}" 
-                           class="block p-6 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">
-                            <h4 class="text-lg font-semibold text-indigo-900">Code Generator</h4>
-                            <p class="text-indigo-700">Generate PHP code with AI assistance</p>
-                        </a>
-                        <a href="{{ route('profile.edit') }}" 
-                           class="block p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
-                            <h4 class="text-lg font-semibold text-gray-900">Profile Settings</h4>
-                            <p class="text-gray-700">Update your account preferences</p>
-                        </a>
+                        <x-dashboard-card
+                            href="{{ route('profile.edit') }}"
+                            title="Profile Settings"
+                            description="Update your account preferences"
+                            bgColor="bg-gray-50"
+                            hoverColor="hover:bg-gray-100"
+                            titleColor="text-gray-900"
+                            descriptionColor="text-gray-700"
+                        />
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Include modal -->
+@include('partials.modals.code-generator')
+
 @endsection
