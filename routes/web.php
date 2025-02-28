@@ -19,7 +19,7 @@ Route::prefix('tools')->name('tools.')->group(function () {
     Route::get('/code-generator', [CodeGeneratorController::class, 'index'])->name('code-generator');
     Route::post('/code-generator/generate', [CodeGeneratorController::class, 'generate'])->name('code-generator.generate');
     
-    // Future tool routes will go here
+    // Future tool routes will go here.
     // Route::get('/debugging', [DebuggingController::class, 'index'])->name('debugging');
     // Route::get('/security', [SecurityController::class, 'index'])->name('security');
     // Route::get('/performance', [PerformanceController::class, 'index'])->name('performance');
