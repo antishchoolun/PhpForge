@@ -100,17 +100,29 @@ nav a:hover::after {
     width: 100%;
 }
 
+.auth-section {
+    position: relative;
+}
+
 .auth-buttons {
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding-left: 2rem;
 }
 
 .auth-buttons .btn {
     padding: 0.5rem 1.25rem;
     font-size: 0.85rem;
     min-width: 90px;
+}
+
+.usage-counter-wrapper {
+    position: absolute;
+    top: calc(100% + 0.25rem);
+    right: 0;
+    font-size: 0.85rem;
+    opacity: 0.75;
+    text-align: right;
 }
 
 /* Hero Section */
