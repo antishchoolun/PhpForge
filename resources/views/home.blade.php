@@ -1,18 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="relative isolate overflow-hidden">
-    <!-- Background pattern -->
-    <div class="absolute inset-0 -z-10 opacity-30">
-        <svg class="h-full w-full" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
-                    <path d="M0 32V.5H32" fill="none" stroke="currentColor" stroke-opacity="0.2"></path>
-                </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grid)"></rect>
-        </svg>
-    </div>
+<div class="relative isolate">
 
     <!-- Hero section -->
     <div class="py-24 sm:py-32">
