@@ -15,6 +15,24 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased">
+    @guest
+        @php
+            $remainingRequests = null;
+            if (!auth()->check()) {
+                $guestUsage = \App\Models\GuestUsage::where('ip_address', request()->ip())
+                    ->where('session_id', session()->getId())
+                    ->first();
+                if ($guestUsage) {
+                    $remainingRequests = max(0, 5 - $guestUsage->usage_count);
+                } else {
+                    $remainingRequests = 5;
+                }
+            }
+        @endphp
+        <div class="usage-counter-wrapper">
+            <x-usage-counter :remaining-requests="$remainingRequests" />
+        </div>
+    @endguest
     <div class="min-h-screen">
         @include('partials.header')
 

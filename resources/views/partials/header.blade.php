@@ -18,28 +18,12 @@
                 </ul>
             </nav>
 
-            <!-- Auth Links & Usage Counter -->
-            <div class="auth-section">
+            <!-- Auth Links -->
+            <div class="auth-buttons">
                 @guest
                     <div class="auth-buttons">
                         <a href="{{ route('login') }}" class="btn btn-outline">Sign In</a>
                         <a href="{{ route('register') }}" class="btn btn-primary">Get Started</a>
-                    </div>
-                    @php
-                        $remainingRequests = null;
-                        if (!auth()->check()) {
-                            $guestUsage = \App\Models\GuestUsage::where('ip_address', request()->ip())
-                                ->where('session_id', session()->getId())
-                                ->first();
-                            if ($guestUsage) {
-                                $remainingRequests = max(0, 5 - $guestUsage->usage_count);
-                            } else {
-                                $remainingRequests = 5;
-                            }
-                        }
-                    @endphp
-                    <div class="usage-counter-wrapper">
-                        <x-usage-counter :remaining-requests="$remainingRequests" />
                     </div>
                 @else
                     <div class="relative" x-data="{ open: false }" @click.away="open = false">

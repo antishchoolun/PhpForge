@@ -117,16 +117,23 @@ nav a:hover::after {
 }
 
 .usage-counter-wrapper {
-    position: absolute;
-    top: calc(100% + 0.35rem);
-    right: 0;
+    position: fixed;
+    top: 0.75rem;
+    right: 1.5rem;
     white-space: nowrap;
+    z-index: 50;
 }
 
 .usage-counter-wrapper > div {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    padding: 0.35rem 0.75rem;
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
 .usage-counter-wrapper svg {
