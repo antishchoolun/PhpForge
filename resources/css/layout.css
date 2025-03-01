@@ -1,37 +1,48 @@
+/* Top Header */
+.top-header {
+    padding: 0.35rem 0;
+    font-size: 0.9rem;
+}
+
+.top-header .container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
 /* Container */
 .container {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1.25rem;
+    padding: 0 2rem;
 }
 
 /* Header & Navigation */
 header {
-    padding: 1rem 0;
     background: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 1rem 0;
 }
 
-header .container {
-    width: 100%;
-    max-width: 1200px;
+.header-content {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 0.5rem 1.25rem;
+    justify-content: space-between;
+    height: 80px;
+    margin: 0 auto;
+    max-width: 900px;
 }
 
 .logo {
     font-weight: 700;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     color: var(--primary);
     display: flex;
     align-items: center;
     gap: 0.5rem;
     text-decoration: none;
+    padding: 0.5rem;
+    white-space: nowrap;
 }
 
 .logo svg {
@@ -47,42 +58,42 @@ header .container {
 }
 
 nav {
-    flex: 1;
     display: flex;
-    justify-content: center;
+    align-items: center;
 }
 
 nav ul {
     display: flex;
-    gap: 2.5rem;
+    gap: 3rem;
     list-style: none;
     margin: 0;
     padding: 0;
+    padding: 0 2rem;
 }
 
 nav a {
     text-decoration: none;
     color: var(--dark);
     font-weight: 500;
-    position: relative;
-    transition: color 0.3s;
     font-size: 0.95rem;
-    white-space: nowrap;
-}
-
-nav a:hover {
-    color: var(--primary);
+    transition: color 0.3s;
+    position: relative;
+    padding: 0.5rem 0;
 }
 
 nav a::after {
     content: "";
     position: absolute;
+    left: 0;
+    bottom: 0;
     width: 0;
     height: 2px;
-    bottom: -4px;
-    left: 0;
     background: linear-gradient(to right, var(--primary), var(--secondary));
-    transition: width 0.3s;
+    transition: width 0.3s ease;
+}
+
+nav a:hover {
+    color: var(--primary);
 }
 
 nav a:hover::after {
@@ -93,8 +104,13 @@ nav a:hover::after {
     display: flex;
     align-items: center;
     gap: 1rem;
-    min-width: 200px;
-    justify-content: flex-end;
+    padding-left: 2rem;
+}
+
+.auth-buttons .btn {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.85rem;
+    min-width: 90px;
 }
 
 /* Hero Section */

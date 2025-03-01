@@ -1,6 +1,28 @@
+<!-- Top Header -->
+<div class="top-header">
+    <div class="container">
+        <!-- Usage Counter -->
+        @php
+            $remainingRequests = null;
+            if (!auth()->check()) {
+                $guestUsage = \App\Models\GuestUsage::where('ip_address', request()->ip())
+                    ->where('session_id', session()->getId())
+                    ->first();
+                if ($guestUsage) {
+                    $remainingRequests = max(0, 5 - $guestUsage->usage_count);
+                } else {
+                    $remainingRequests = 5;
+                }
+            }
+        @endphp
+        <x-usage-counter :remaining-requests="$remainingRequests" />
+    </div>
+</div>
+
+<!-- Main Header -->
 <header>
-    <div class="container mx-auto px-4 py-4">
-        <div class="flex justify-between items-center">
+    <div class="container">
+        <div class="header-content">
             <!-- Logo -->
             <a href="/" class="logo">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -18,25 +40,8 @@
                 </ul>
             </nav>
 
-            <!-- Auth & Usage -->
+            <!-- Auth Links -->
             <div class="auth-buttons">
-                <!-- Usage Counter -->
-                @php
-                    $remainingRequests = null;
-                    if (!auth()->check()) {
-                        $guestUsage = \App\Models\GuestUsage::where('ip_address', request()->ip())
-                            ->where('session_id', session()->getId())
-                            ->first();
-                        if ($guestUsage) {
-                            $remainingRequests = max(0, 5 - $guestUsage->usage_count);
-                        } else {
-                            $remainingRequests = 5;
-                        }
-                    }
-                @endphp
-                <x-usage-counter :remaining-requests="$remainingRequests" />
-
-                <!-- Auth Links -->
                 @guest
                     <div class="auth-buttons">
                         <a href="{{ route('login') }}" class="btn btn-outline">Sign In</a>
