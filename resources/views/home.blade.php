@@ -26,7 +26,7 @@
     </div>
 
     <!-- Tools section -->
-    <div class="py-24 sm:py-32">
+    <div class="">
         <div class="container">
             <div class="tool-cards">
                 <!-- PHP Code Generator -->

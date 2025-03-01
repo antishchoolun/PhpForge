@@ -1,8 +1,8 @@
-<footer>
-
+<footer class="border-t border-gray-100 bg-gradient-to-b from-gray-50/50 to-white">
     <div class="container">
-        <!-- Newsletter Section -->
-        <div class="mb-16 text-center">
+        
+<!-- Newsletter Section -->
+<div class="mb-16 text-center">
             <h3 class="text-2xl font-bold mb-4 bg-gradient-to-r from-indigo-500 to-pink-500 bg-clip-text text-transparent">Stay Updated with PhpForge</h3>
             <p class="text-gray-600 mb-6 max-w-2xl mx-auto">Get the latest updates, tips, and exclusive content delivered directly to your inbox.</p>
             <form class="max-w-md mx-auto flex gap-2">
@@ -12,9 +12,8 @@
                 </button>
             </form>
         </div>
-
-        <!-- Main Footer Content -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-12">
+<!-- Main Footer Content -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             <div class="space-y-4">
                 <h4 class="text-lg font-semibold bg-gradient-to-r from-indigo-500 to-pink-500 bg-clip-text text-transparent">Tools</h4>
                 <ul class="space-y-3">
