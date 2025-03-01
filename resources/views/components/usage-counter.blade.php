@@ -20,7 +20,7 @@
             <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
             </svg>
-            <span class="text-sm whitespace-nowrap">{{ $count }} free {{ Str::plural('request', $count) }} left</span>
+            <span class="text-sm whitespace-nowrap">{{ $count }} free {{ Str::plural('request', $count) }} left today</span>
             <a href="{{ route('register') }}" class="text-sm text-indigo-600 hover:text-indigo-900 whitespace-nowrap">
                 Get unlimited →
             </a>

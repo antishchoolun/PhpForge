@@ -4,8 +4,8 @@
 <div class="relative isolate">
 
     <!-- Hero section -->
-    <div class="py-24 sm:py-32">
-        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="hero">
+        <div class="container">
             <div class="mx-auto max-w-2xl text-center">
                 <h1 class="hero-title animate__animated animate__fadeIn">
                     PHP Development, <br>Supercharged by AI
@@ -13,10 +13,13 @@
                 <p class="hero-description animate__animated animate__fadeIn animate__delay-1s">
                     Transform your PHP workflow with our suite of AI-powered tools designed to help you code faster, debug smarter, and build more secure applications.
                 </p>
-                <div class="mt-10">
-                    <button class="btn btn-primary animate__animated animate__fadeIn animate__delay-2s">
+                <div class="hero-buttons animate__animated animate__fadeIn animate__delay-2s">
+                    <button class="btn btn-primary">
                         Explore Tools
                     </button>
+                    <a href="{{ route('pricing') }}" class="btn btn-secondary">
+                        View Pricing
+                    </a>
                 </div>
             </div>
         </div>

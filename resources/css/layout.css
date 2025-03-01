@@ -159,13 +159,14 @@ nav a:hover::after {
 
 /* Hero Section */
 .hero {
-    padding: 5rem 0 3rem;
+    padding: 3.5rem 0 2.5rem;
     text-align: center;
 }
 
 .hero-title {
-    font-size: 3.5rem;
+    font-size: 3.25rem;
     font-weight: 800;
+    line-height: 1.1;
     margin-bottom: 1rem;
     background: linear-gradient(to right, var(--dark), var(--primary));
     -webkit-background-clip: text;
@@ -174,10 +175,29 @@ nav a:hover::after {
 }
 
 .hero-description {
-    font-size: 1.2rem;
+    font-size: 1.125rem;
     color: var(--gray);
-    max-width: 700px;
-    margin: 0 auto 2rem;
+    max-width: 650px;
+    margin: 0 auto 1.5rem;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-secondary {
+    background: white;
+    color: var(--dark);
+    border: 1px solid var(--gray-200);
+}
+
+.btn-secondary:hover {
+    background: var(--gray-50);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .btn {
