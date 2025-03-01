@@ -3,7 +3,7 @@
         <div class="flex justify-between items-center">
             <!-- Logo -->
             <a href="/" class="flex items-center">
-                <span class="text-2xl font-bold text-indigo-600">PhpForge</span>
+                <x-logo width="150" class="hover:opacity-90 transition-opacity" />
             </a>
 
             <!-- Navigation -->

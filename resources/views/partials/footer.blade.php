@@ -202,7 +202,10 @@
                     </a>
                 </div>
 
-                <p class="text-gray-600 text-sm">© {{ date('Y') }} PhpForge. Built with ❤️ for PHP developers.</p>
+                <div class="flex items-center space-x-3">
+                    <x-logo width="100" class="opacity-75" />
+                    <p class="text-gray-600 text-sm">© {{ date('Y') }} PhpForge. Built with ❤️ for PHP developers.</p>
+                </div>
             </div>
         </div>
     </div>
