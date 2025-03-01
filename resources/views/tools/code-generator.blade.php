@@ -39,7 +39,7 @@
                     </div>
                 </form>
 
-                <div id="result" class="mt-8 hidden">
+                <div id="result" class="mt-8 hidden animate__animated">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Generated Code</h3>
                     <div class="relative">
                         <pre id="codeOutput" class="p-4 bg-gray-800 text-white rounded-lg overflow-x-auto"></pre>
@@ -81,8 +81,18 @@ document.getElementById('generateForm').addEventListener('submit', async functio
         const data = await response.json();
 
         if (response.ok) {
-            document.getElementById('result').classList.remove('hidden');
-            document.getElementById('codeOutput').textContent = data.code;
+            const resultDiv = document.getElementById('result');
+            const codeOutput = document.getElementById('codeOutput');
+            resultDiv.classList.remove('hidden');
+            
+            // Set content and animate
+            codeOutput.textContent = data.code;
+            resultDiv.classList.add('animate__fadeInUp', 'animate__faster');
+            
+            // Remove animation classes after animation completes
+            resultDiv.addEventListener('animationend', () => {
+                resultDiv.classList.remove('animate__fadeInUp', 'animate__faster');
+            }, { once: true });
         } else {
             alert(data.message || 'An error occurred');
         }

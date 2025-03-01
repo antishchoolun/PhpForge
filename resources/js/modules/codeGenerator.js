@@ -68,12 +68,18 @@ export function initCodeGenerator() {
             if (codeElement) {
                 codeElement.textContent = result.code;
                 
-                // Show the result container
+                // Show the result container with animation
                 if (codeResult) {
-                    // Update classes for visibility
+                    // Add animation classes first
+                    codeResult.classList.add('animate__animated', 'animate__fadeInRight');
                     codeResult.classList.remove('hidden');
                     mainContent.classList.remove('grid-cols-1');
                     mainContent.classList.add('flex', 'flex-row');
+
+                    // Remove animation classes after animation completes
+                    codeResult.addEventListener('animationend', () => {
+                        codeResult.classList.remove('animate__animated', 'animate__fadeInRight');
+                    }, { once: true });
                     
                     // Update analysis based on code characteristics
                     const analysisContent = generateAnalysis(result.code, 'php');
