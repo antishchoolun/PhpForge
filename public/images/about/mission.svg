@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200">
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4776E6" />
+      <stop offset="100%" stop-color="#8E54E9" />
+    </linearGradient>
+    <linearGradient id="php-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF9966" />
+      <stop offset="100%" stop-color="#FF5E62" />
+    </linearGradient>
+    <linearGradient id="ai-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F5A0" />
+      <stop offset="100%" stop-color="#00D9F5" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    
+    <!-- Animation definitions -->
+    <animate id="pulse-anim" attributeName="opacity" from="0.8" to="1" dur="2s" repeatCount="indefinite" />
+    <animate id="rotate-anim" attributeName="transform" from="rotate(0 200 100)" to="rotate(360 200 100)" dur="20s" repeatCount="indefinite" />
+  </defs>
+  
+  <!-- Glowing background circle -->
+  <circle cx="200" cy="100" r="90" fill="url(#bg-gradient)" opacity="0.7">
+    <animate attributeName="r" values="90;94;90" dur="3s" repeatCount="indefinite" />
+  </circle>
+  
+  <!-- Gear design element -->
+  <g filter="url(#glow)">
+    <path d="M200 30 L205 50 L225 45 L215 65 L235 75 L215 85 L225 105 L205 100 L200 120 L195 100 L175 105 L185 85 L165 75 L185 65 L175 45 L195 50 Z" fill="url(#ai-gradient)" opacity="0.9">
+      <animateTransform attributeName="transform" type="rotate" from="0 200 75" to="360 200 75" dur="15s" repeatCount="indefinite" />
+    </path>
+  </g>
+  
+  <!-- PHP symbol -->
+  <g filter="url(#glow)">
+    <path d="M180 85 C165 85, 160 95, 170 105 C180 115, 195 105, 185 95 C175 85, 190 85, 195 95" stroke="url(#php-gradient)" stroke-width="5" fill="none">
+      <animate attributeName="stroke-dasharray" values="0,200;200,0" dur="4s" begin="0.5s" repeatCount="indefinite" />
+    </path>
+  </g>
+  
+  <!-- Text elements -->
+  <g>
+    <text x="200" y="145" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#FFFFFF">
+      PhpForge
+    </text>
+    <text x="200" y="165" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#FFFFFF" opacity="0.8">
+      AI-POWERED DEVELOPMENT TOOLS
+      <animate attributeName="opacity" values="0.8;1;0.8" dur="3s" repeatCount="indefinite" />
+    </text>
+  </g>
+  
+  <!-- Circuit pattern elements -->
+  <g stroke="#FFFFFF" stroke-width="1" opacity="0.3">
+    <path d="M110 75 L140 75 L160 95" fill="none">
+      <animate attributeName="stroke-dashoffset" values="100;0" dur="3s" repeatCount="indefinite" />
+      <animate attributeName="stroke-dasharray" values="1,5;5,1" dur="5s" repeatCount="indefinite" />
+    </path>
+    <path d="M290 75 L260 75 L240 95" fill="none">
+      <animate attributeName="stroke-dashoffset" values="0;100" dur="3s" repeatCount="indefinite" />
+      <animate attributeName="stroke-dasharray" values="5,1;1,5" dur="5s" repeatCount="indefinite" />
+    </path>
+    <path d="M110 125 L140 125 L160 105" fill="none">
+      <animate attributeName="stroke-dashoffset" values="100;0" dur="3s" repeatCount="indefinite" />
+      <animate attributeName="stroke-dasharray" values="1,5;5,1" dur="5s" repeatCount="indefinite" />
+    </path>
+    <path d="M290 125 L260 125 L240 105" fill="none">
+      <animate attributeName="stroke-dashoffset" values="0;100" dur="3s" repeatCount="indefinite" />
+      <animate attributeName="stroke-dasharray" values="5,1;1,5" dur="5s" repeatCount="indefinite" />
+    </path>
+  </g>
+  
+  <!-- Animated particles -->
+  <g fill="#FFFFFF">
+    <circle cx="120" cy="85" r="1.5">
+      <animate attributeName="opacity" values="0;1;0" dur="4s" repeatCount="indefinite" begin="0s" />
+      <animate attributeName="cx" values="120;160" dur="4s" repeatCount="indefinite" begin="0s" />
+      <animate attributeName="cy" values="85;95" dur="4s" repeatCount="indefinite" begin="0s" />
+    </circle>
+    <circle cx="280" cy="85" r="1.5">
+      <animate attributeName="opacity" values="0;1;0" dur="4s" repeatCount="indefinite" begin="1s" />
+      <animate attributeName="cx" values="280;240" dur="4s" repeatCount="indefinite" begin="1s" />
+      <animate attributeName="cy" values="85;95" dur="4s" repeatCount="indefinite" begin="1s" />
+    </circle>
+    <circle cx="120" cy="115" r="1.5">
+      <animate attributeName="opacity" values="0;1;0" dur="4s" repeatCount="indefinite" begin="2s" />
+      <animate attributeName="cx" values="120;160" dur="4s" repeatCount="indefinite" begin="2s" />
+      <animate attributeName="cy" values="115;105" dur="4s" repeatCount="indefinite" begin="2s" />
+    </circle>
+    <circle cx="280" cy="115" r="1.5">
+      <animate attributeName="opacity" values="0;1;0" dur="4s" repeatCount="indefinite" begin="3s" />
+      <animate attributeName="cx" values="280;240" dur="4s" repeatCount="indefinite" begin="3s" />
+      <animate attributeName="cy" values="115;105" dur="4s" repeatCount="indefinite" begin="3s" />
+    </circle>
+  </g>
+</svg>

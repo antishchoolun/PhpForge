@@ -5,10 +5,9 @@
     <!-- Hero Section -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-20">
-            <x-logo width="200" class="mx-auto mb-8" />
-            <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-5xl md:text-6xl mb-8">
+            <h1 class="text-4xl font-extrabold tracking-tight text-indigo-500 sm:text-5xl md:text-6xl mb-8">
                 <span class="block">Building the Future of</span>
-                <span class="block bg-gradient-to-r from-indigo-500 to-pink-500 bg-clip-text text-transparent">PHP Development</span>
+                <span class="block">PHP Development</span>
             </h1>
             <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 dark:text-gray-400 sm:mt-4">
                 Empowering developers with AI-driven tools to write better, faster, and more secure PHP code.
@@ -21,7 +20,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 <div class="space-y-6">
-                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white">
+                    <h2 class="text-3xl font-bold text-indigo-500">
                         Our Mission
                     </h2>
                     <p class="text-lg text-gray-600 dark:text-gray-300">
@@ -37,12 +36,8 @@
                 <div class="relative">
                     <div class="aspect-w-16 aspect-h-9 rounded-xl overflow-hidden bg-gradient-to-br from-indigo-500/30 to-pink-500/30 flex items-center justify-center">
                         <div class="text-center text-gray-500 dark:text-gray-400">
-                            <!-- Placeholder for mission image -->
-                            <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            <p>Place mission.jpg here</p>
-                            <p class="text-sm">Recommended size: 1200x675</p>
+                
+                            <img class="lg:w-[438px]" src="{{ asset('images/about/mission.svg') }}" alt="PhpForge.com">
                         </div>
                     </div>
                     <!-- Circuit Pattern Overlay -->
@@ -60,7 +55,7 @@
 
     <!-- Values Section -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-16">
+        <h2 class="text-3xl font-bold text-center text-indigo-500 mb-16">
             Our Core Values
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -108,89 +103,46 @@
         </div>
     </div>
 
-    <!-- Team Section -->
-    <div class="bg-gradient-to-br from-indigo-50 to-pink-50 dark:from-gray-900 dark:to-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-            <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-16">
-                Meet Our Team
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Team Member 1 -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden transition-transform hover:-translate-y-2">
-                    <div class="aspect-w-3 aspect-h-4 bg-gradient-to-br from-indigo-500/30 to-pink-500/30 flex items-center justify-center">
-                        <!-- Placeholder for team member image -->
-                        <div class="text-center text-gray-500 dark:text-gray-400">
-                            <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                            </svg>
-                            <p>Place member1.jpg here</p>
-                            <p class="text-sm">Recommended size: 800x1067</p>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">John Doe</h3>
-                        <p class="text-indigo-600 dark:text-indigo-400 mb-4">Founder & CEO</p>
-                        <p class="text-gray-600 dark:text-gray-300">10+ years of experience in PHP development and AI integration.</p>
-                    </div>
-                </div>
-
-                <!-- Team Member 2 -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden transition-transform hover:-translate-y-2">
-                    <div class="aspect-w-3 aspect-h-4 bg-gradient-to-br from-indigo-500/30 to-pink-500/30 flex items-center justify-center">
-                        <!-- Placeholder for team member image -->
-                        <div class="text-center text-gray-500 dark:text-gray-400">
-                            <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                            </svg>
-                            <p>Place member2.jpg here</p>
-                            <p class="text-sm">Recommended size: 800x1067</p>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Jane Smith</h3>
-                        <p class="text-indigo-600 dark:text-indigo-400 mb-4">Lead AI Engineer</p>
-                        <p class="text-gray-600 dark:text-gray-300">Expert in machine learning and natural language processing.</p>
-                    </div>
-                </div>
-
-                <!-- Team Member 3 -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden transition-transform hover:-translate-y-2">
-                    <div class="aspect-w-3 aspect-h-4 bg-gradient-to-br from-indigo-500/30 to-pink-500/30 flex items-center justify-center">
-                        <!-- Placeholder for team member image -->
-                        <div class="text-center text-gray-500 dark:text-gray-400">
-                            <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                            </svg>
-                            <p>Place member3.jpg here</p>
-                            <p class="text-sm">Recommended size: 800x1067</p>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Mike Johnson</h3>
-                        <p class="text-indigo-600 dark:text-indigo-400 mb-4">Head of Product</p>
-                        <p class="text-gray-600 dark:text-gray-300">Passionate about creating developer-friendly tools.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Stats Section -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div class="text-center">
+            <!-- Lines of Code -->
+            <div class="text-center animate__animated animate__fadeIn" style="animation-delay: 0.1s">
+                <div class="w-12 h-12 bg-indigo-500/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
                 <div class="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">1M+</div>
                 <div class="text-gray-600 dark:text-gray-300">Lines of Code Generated</div>
             </div>
-            <div class="text-center">
+            <!-- Happy Developers -->
+            <div class="text-center animate__animated animate__fadeIn" style="animation-delay: 0.2s">
+                <div class="w-12 h-12 bg-indigo-500/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
                 <div class="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">50K+</div>
                 <div class="text-gray-600 dark:text-gray-300">Happy Developers</div>
             </div>
-            <div class="text-center">
+            <!-- Countries -->
+            <div class="text-center animate__animated animate__fadeIn" style="animation-delay: 0.3s">
+                <div class="w-12 h-12 bg-indigo-500/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
                 <div class="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">100+</div>
                 <div class="text-gray-600 dark:text-gray-300">Countries Reached</div>
             </div>
-            <div class="text-center">
+            <!-- Satisfaction Rate -->
+            <div class="text-center animate__animated animate__fadeIn" style="animation-delay: 0.4s">
+                <div class="w-12 h-12 bg-indigo-500/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
                 <div class="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">99%</div>
                 <div class="text-gray-600 dark:text-gray-300">Satisfaction Rate</div>
             </div>
