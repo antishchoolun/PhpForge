@@ -118,11 +118,37 @@ nav a:hover::after {
 
 .usage-counter-wrapper {
     position: absolute;
-    top: calc(100% + 0.25rem);
+    top: calc(100% + 0.35rem);
     right: 0;
-    font-size: 0.85rem;
-    opacity: 0.75;
-    text-align: right;
+    white-space: nowrap;
+}
+
+.usage-counter-wrapper > div {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.usage-counter-wrapper svg {
+    flex-shrink: 0;
+}
+
+.usage-counter-wrapper a {
+    position: relative;
+    padding-left: 0.75rem;
+    margin-left: 0.75rem;
+}
+
+.usage-counter-wrapper a::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 12px;
+    background-color: currentColor;
+    opacity: 0.2;
 }
 
 /* Hero Section */
