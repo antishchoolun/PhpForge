@@ -6,13 +6,15 @@ PhpForge is an AI-powered PHP development tool suite built with Laravel and Groq
 
 - **PHP Code Generator**: AI-powered code generation from natural language descriptions
 - **AI-Powered Code Analysis**: Provides code improvement suggestions and detects potential issues
+- **Guest Usage Management**: Rate limiting and usage tracking for guests
 
 ## Technology Stack
 
 ### Frontend
-- Vanilla JavaScript for maximum compatibility
+- Alpine.js for reactive components
 - Tailwind CSS for styling
 - Vite for asset bundling
+- Canvas API for animations
 - Progressive enhancement approach
 
 ### Backend
@@ -20,6 +22,7 @@ PhpForge is an AI-powered PHP development tool suite built with Laravel and Groq
 - PHP 8.1+
 - MySQL/MariaDB
 - Groq API integration
+- Browser fingerprinting
 
 ## Implementation Details
 
@@ -32,6 +35,9 @@ PhpForge is an AI-powered PHP development tool suite built with Laravel and Groq
   - Code syntax highlighting
   - Copy to clipboard functionality
   - Error state handling
+  - Quantum loading animation
+  - Error popups
+  - Dark mode support
 
 #### Backend Implementation
 - Controller: `app/Http/Controllers/CodeGeneratorController.php`
@@ -41,17 +47,44 @@ PhpForge is an AI-powered PHP development tool suite built with Laravel and Groq
   - Code generation with type hints
   - Error handling and validation
   - Response caching for performance
+  - Guest usage tracking
 
-### Groq API Integration
+### Component System
 
-#### Client Implementation
-- Located in `app/Services/GroqApi/GroqApiClient.php`
-- Features:
-  - API request handling
-  - Response parsing
-  - Error management
-  - Rate limiting
-  - Logging capabilities
+#### Reusable Components
+- `error-popup.blade.php`: Error display system
+- `quantum-loader.blade.php`: Loading animation
+- `code-actions.blade.php`: Code action buttons
+- `error-message.blade.php`: Inline error messages
+
+#### JavaScript Modules
+- `codeGenerator.js`: Code generation interface
+- `codeActions.js`: Code action functionality
+- `errorHandler.js`: Error display system
+- `modals.js`: Modal dialog management
+
+### Guest Usage System
+
+#### Implementation
+- Guest fingerprinting for tracking
+- Daily usage limits
+- Rate limiting middleware
+- Usage reset scheduling
+- Upgrade prompts
+
+#### Database Schema
+```sql
+CREATE TABLE guest_usage (
+    id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    fingerprint VARCHAR(255) NOT NULL,
+    ip_address VARCHAR(45) NOT NULL,
+    requests_count INT UNSIGNED DEFAULT 0,
+    last_request_at TIMESTAMP NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+    UNIQUE KEY unique_fingerprint (fingerprint)
+);
+```
 
 ## Performance Optimizations
 
@@ -60,12 +93,14 @@ PhpForge is an AI-powered PHP development tool suite built with Laravel and Groq
 - Minified and versioned assets via Vite
 - Optimized Tailwind CSS production build
 - Browser caching implementation
+- Efficient component rendering
 
 ### Backend
 - Response caching for API calls
 - Database query optimization
 - Route caching in production
 - Efficient error logging
+- Guest usage caching
 
 ## Security Measures
 
@@ -74,26 +109,30 @@ PhpForge is an AI-powered PHP development tool suite built with Laravel and Groq
 - Request validation and sanitization
 - Rate limiting implementation
 - CSRF protection
+- Fingerprint validation
 
 ### Application Security
 - Input validation on all forms
 - XSS protection via proper escaping
-- SQL injection prevention via prepared statements
+- SQL injection prevention
 - Secure password hashing
+- Guest tracking protection
 
 ## Error Handling
 
 ### Frontend Errors
+- Modern error popup system
 - User-friendly error messages
 - Graceful degradation
 - Network error handling
-- Loading states for async operations
+- Loading states with animations
 
 ### Backend Errors
 - Detailed logging for debugging
 - Custom exception handling
 - Failsafe error responses
 - API error management
+- Rate limit error handling
 
 ## Monitoring
 
@@ -102,7 +141,9 @@ PhpForge is an AI-powered PHP development tool suite built with Laravel and Groq
 [YYYY-MM-DD HH:mm:ss] channel.ERROR: Message {
     "url": "/api/v1/tools/generate",
     "method": "POST",
-    "error": "Error details"
+    "error": "Error details",
+    "fingerprint": "user_fingerprint",
+    "usage_count": 5
 }
 ```
 
@@ -111,6 +152,7 @@ PhpForge is an AI-powered PHP development tool suite built with Laravel and Groq
 - Memory usage tracking
 - Database query performance
 - Cache hit rates
+- Guest usage patterns
 
 ## Deployment Process
 
@@ -120,12 +162,14 @@ PhpForge is an AI-powered PHP development tool suite built with Laravel and Groq
 3. Cache configuration
 4. Cache routes
 5. Warm up caches
+6. Initialize guest tracking
 
 ### Environment Configuration
 - `.env.example` template
 - Production configurations
 - Logging settings
 - Cache settings
+- Rate limit settings
 
 ## Future Enhancements
 
@@ -134,12 +178,14 @@ PhpForge is an AI-powered PHP development tool suite built with Laravel and Groq
 2. Integration with additional AI models
 3. Support for more PHP versions and frameworks
 4. Improved error detection and suggestions
+5. Advanced usage analytics
 
 ### Infrastructure
 1. Enhanced caching strategies
 2. Improved monitoring capabilities
 3. Additional security measures
 4. Performance optimizations
+5. Usage tracking improvements
 
 ## Development Guidelines
 
@@ -148,15 +194,18 @@ PhpForge is an AI-powered PHP development tool suite built with Laravel and Groq
 - Type declarations
 - Comprehensive docblocks
 - Meaningful variable names
+- Component reusability
 
 ### Testing Requirements
 - Unit tests for services
 - Integration tests for API
 - End-to-end testing for UI
 - Security testing
+- Rate limit testing
 
 ### Documentation
 - Inline code documentation
 - API documentation
 - Setup instructions
 - Deployment guides
+- Component usage guides
