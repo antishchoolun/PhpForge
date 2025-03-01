@@ -1,12 +1,6 @@
-<footer class="relative bg-gradient-to-br from-indigo-50 to-pink-50">
-    <!-- Top Wave SVG -->
-    <div class="absolute top-0 left-0 w-full overflow-hidden leading-none rotate-180">
-        <svg class="relative w-full h-12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120">
-            <path class="fill-current text-white" d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
-        </svg>
-    </div>
+<footer>
 
-    <div class="max-w-7xl mx-auto pt-20 pb-12 px-4 sm:px-6 lg:px-8 bg-white/80 backdrop-blur-sm">
+    <div class="container">
         <!-- Newsletter Section -->
         <div class="mb-16 text-center">
             <h3 class="text-2xl font-bold mb-4 bg-gradient-to-r from-indigo-500 to-pink-500 bg-clip-text text-transparent">Stay Updated with PhpForge</h3>

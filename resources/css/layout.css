@@ -4,12 +4,13 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: transparent;
 }
 
 .logo {
     font-weight: 700;
     font-size: 1.8rem;
-    color: var(--gray);
+    color: var(--primary);
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -66,7 +67,7 @@ nav a:hover::after {
     text-align: center;
 }
 
-.hero h1 {
+.hero-title {
     font-size: 3.5rem;
     font-weight: 800;
     margin-bottom: 1rem;
@@ -76,11 +77,47 @@ nav a:hover::after {
     color: transparent;
 }
 
-.hero p {
+.hero-description {
     font-size: 1.2rem;
     color: var(--gray);
     max-width: 700px;
     margin: 0 auto 2rem;
+}
+
+.btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+}
+
+.btn-outline:hover {
+    background: rgba(99, 102, 241, 0.05);
+    transform: translateY(-2px);
 }
 
 /* Footer */
@@ -89,8 +126,74 @@ footer {
     padding: 2rem 0;
     text-align: center;
     color: var(--gray);
-    background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Feature Tags */
+.feature-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.ai-tag {
+    background: rgba(236, 72, 153, 0.1);
+    color: var(--secondary);
+}
+
+.security-tag {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+}
+
+/* Tool Cards */
+.tool-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin: 3rem 0;
+}
+
+.card {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    position: relative;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.card-accent {
+    height: 6px;
+    width: 100%;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+}
+
+.card-content {
+    padding: 1.5rem;
+}
+
+.card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary);
+    font-size: 1.5rem;
 }
 
 /* Responsive Design */

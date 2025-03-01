@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CodeGeneratorController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AboutController;
 use App\Http\Middleware\TrackUsage;
 
 /*
@@ -14,6 +15,7 @@ use App\Http\Middleware\TrackUsage;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/about', [AboutController::class, 'index'])->name('about');
 Route::get('/pricing', function () {
     return view('pricing');
 })->name('pricing');
