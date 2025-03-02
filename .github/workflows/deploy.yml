@@ -1,0 +1,39 @@
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2 # Fetch the last two commits to ensure we have a previous commit to compare
+
+      - name: Set up Git
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+
+      - name: Determine files changed
+        id: file_changes
+        run: |
+          CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
+          echo "Changed files: $CHANGED_FILES"
+          echo "$CHANGED_FILES" > changed_files.txt
+
+      - name: Deploy changed files to Hostinger
+        uses: SamKirkland/FTP-Deploy-Action@4.3.3
+        with:
+          server: 217.196.55.51
+          username: u721877103.phpforge
+          password: ${{ secrets.HOSTINGER_PASSWORD }}
+          state-name: .ftp-deploy-sync-state.json
+          local-dir: ./
+        env:
+          FILES_TO_DEPLOY: $(cat changed_files.txt | xargs)
