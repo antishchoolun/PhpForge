@@ -120,9 +120,9 @@
                         </div>
                         <h3 class="text-xl font-bold mb-2 bg-gradient-to-r from-indigo-500 to-pink-500 bg-clip-text text-transparent">Documentation Generator</h3>
                         <p class="text-gray-600 mb-4">Create comprehensive, well-structured documentation directly from your code.</p>
-                        <a href="#" class="btn btn-primary">
+                        <button onclick="openModal('documentation-generator')" class="btn btn-primary">
                             Generate Docs
-                        </a>
+                        </button>
                     </div>
                 </div>
 
@@ -155,5 +155,6 @@
 @include('partials.modals.code-debugger')
 @include('partials.modals.security-analyzer')
 @include('partials.modals.performance-optimizer')
+@include('partials.modals.documentation-generator')
 
 @endsection

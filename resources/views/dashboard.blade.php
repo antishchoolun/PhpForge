@@ -44,6 +44,11 @@
                             title="Performance Optimizer"
                             description="Optimize code for better performance"
                         />
+                        <x-dashboard-card
+                            onClick="openModal('documentation-generator')"
+                            title="Documentation Generator"
+                            description="Generate comprehensive documentation"
+                        />
                     </div>
                 </div>
 
@@ -71,6 +76,7 @@
 @include('partials.modals.code-generator')
 @include('partials.modals.code-debugger')
 @include('partials.modals.security-analyzer')
+@include('partials.modals.documentation-generator')
 @include('partials.modals.performance-optimizer')
 
 @endsection
