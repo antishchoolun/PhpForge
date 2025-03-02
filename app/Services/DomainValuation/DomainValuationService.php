@@ -173,11 +173,10 @@ class DomainValuationService
         // Add TLD availability data
         $valuation['tldAvailability'] = $this->checkTldAvailability($domain);
 
-        // Add WHOIS data if available
-        try {
-            $valuation['whoisData'] = $this->getWhoisData($domain);
-        } catch (\Exception $e) {
-            Log::warning('Failed to fetch WHOIS data: ' . $e->getMessage());
+        // Try to get WHOIS data, but continue without it if not available
+        $whoisData = $this->tryGetWhoisData($domain);
+        if ($whoisData !== null) {
+            $valuation['whoisData'] = $whoisData;
         }
 
         return $valuation;
@@ -218,17 +217,32 @@ class DomainValuationService
         return $availability;
     }
 
-    protected function getWhoisData(string $domain): ?array
+    protected function tryGetWhoisData(string $domain): ?array
     {
         try {
+            // Check if whois command exists
+            $whoisCheck = shell_exec('where whois 2>&1');
+            if (empty($whoisCheck) || str_contains($whoisCheck, 'not recognized')) {
+                return null;
+            }
+
             $whois = shell_exec("whois " . escapeshellarg($domain));
-            return [
+            if (empty($whois)) {
+                return null;
+            }
+
+            $data = [
                 'registrar' => $this->extractWhoisField($whois, 'Registrar'),
                 'created' => $this->extractWhoisField($whois, 'Creation Date'),
                 'expires' => $this->extractWhoisField($whois, 'Registry Expiry Date'),
                 'updated' => $this->extractWhoisField($whois, 'Updated Date')
             ];
+
+            // Only return if we got at least one piece of data
+            return array_filter($data) ? $data : null;
+
         } catch (\Exception $e) {
+            Log::info('WHOIS lookup not available: ' . $e->getMessage());
             return null;
         }
     }
