@@ -1,0 +1,21 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Redirect to the public folder
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ /public/$1 [L]
+
+    # Handle front controller
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+
+    # Prevent directory browsing
+    Options -Indexes
+
+    # Protect sensitive files
+    <FilesMatch "(^\.|\.env|\.git)">
+        Order Deny,Allow
+        Deny from all
+    </FilesMatch>
+</IfModule>
