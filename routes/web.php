@@ -16,6 +16,7 @@ use App\Http\Controllers\DocumentationController;
 use App\Http\Controllers\PrivacyPolicyController;
 use App\Http\Controllers\TermsController;
 use App\Http\Controllers\CookiePolicyController;
+use App\Http\Controllers\SupportController;
 use App\Http\Middleware\TrackUsage;
 
 /*
@@ -46,6 +47,9 @@ Route::get('/pricing', function () {
 Route::get('/privacy-policy', [PrivacyPolicyController::class, 'index'])->name('privacy.policy');
 Route::get('/terms', [TermsController::class, 'index'])->name('terms');
 Route::get('/cookie-policy', [CookiePolicyController::class, 'index'])->name('cookie.policy');
+
+Route::get('/support', [SupportController::class, 'index'])->name('support');
+Route::post('/support/contact', [SupportController::class, 'contact'])->name('support.contact');
 
 // Auth routes (provided by Laravel Breeze)
 require __DIR__.'/auth.php';
