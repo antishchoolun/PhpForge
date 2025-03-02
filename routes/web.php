@@ -18,6 +18,7 @@ use App\Http\Controllers\TermsController;
 use App\Http\Controllers\CookiePolicyController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\StatusController;
+use App\Http\Controllers\ApiReferenceController;
 use App\Http\Middleware\TrackUsage;
 
 /*
@@ -52,6 +53,7 @@ Route::get('/cookie-policy', [CookiePolicyController::class, 'index'])->name('co
 Route::get('/support', [SupportController::class, 'index'])->name('support');
 Route::post('/support/contact', [SupportController::class, 'contact'])->name('support.contact');
 Route::get('/status', [StatusController::class, 'index'])->name('status');
+Route::get('/api-reference', [ApiReferenceController::class, 'index'])->name('api.reference');
 
 // Auth routes (provided by Laravel Breeze)
 require __DIR__.'/auth.php';
