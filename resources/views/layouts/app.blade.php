@@ -19,7 +19,7 @@
 </head>
 <body class="font-sans antialiased">
     <div class="min-h-screen">
-        @include('partials.header')
+        @include('layouts.navigation')
 
         <!-- Page Content -->
         <main>
@@ -31,7 +31,7 @@
                 </header>
             @endif
 
-            @yield('content')
+            {{ $slot }}
         </main>
 
         @include('partials.footer')
