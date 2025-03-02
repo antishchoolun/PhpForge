@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CodeGeneratorController;
 use App\Http\Controllers\CodeDebuggerController;
@@ -18,6 +19,16 @@ use App\Http\Middleware\TrackUsage;
 | Web Routes
 |--------------------------------------------------------------------------
 */
+
+Route::get('/clear-cache', function () {
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('config:cache');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    
+    return "Cache cleared successfully!";
+})->middleware('auth')->name('cache.clear');
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
