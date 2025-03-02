@@ -10,6 +10,7 @@ use App\Http\Controllers\DocumentationGeneratorController;
 use App\Http\Controllers\DomainValuationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Middleware\TrackUsage;
 
 /*
@@ -20,6 +21,7 @@ use App\Http\Middleware\TrackUsage;
 
 // Public routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 Route::get('/pricing', function () {
     return view('pricing');

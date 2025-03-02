@@ -5,12 +5,24 @@
 <div class="mb-16 text-center">
             <h3 class="text-2xl font-bold mb-4 bg-gradient-to-r from-indigo-500 to-pink-500 bg-clip-text text-transparent">Stay Updated with PhpForge</h3>
             <p class="text-gray-600 mb-6 max-w-2xl mx-auto">Get the latest updates, tips, and exclusive content delivered directly to your inbox.</p>
-            <form class="max-w-md mx-auto flex gap-2">
-                <input type="email" placeholder="Enter your email" class="flex-1 px-4 py-2 rounded-lg bg-white border border-gray-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-colors">
+            <form action="{{ route('newsletter.subscribe') }}" method="POST" class="max-w-md mx-auto flex gap-2">
+                @csrf
+                <input type="email" name="email" placeholder="Enter your email" required 
+                    class="flex-1 px-4 py-2 rounded-lg bg-white border border-gray-200 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-colors">
                 <button type="submit" class="px-6 py-2 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                     Subscribe
                 </button>
             </form>
+            @if (session('success'))
+                <div class="mt-4 text-sm text-green-600 text-center">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="mt-4 text-sm text-red-600 text-center">
+                    {{ session('error') }}
+                </div>
+            @endif
         </div>
 <!-- Main Footer Content -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
