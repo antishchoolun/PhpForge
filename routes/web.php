@@ -7,6 +7,7 @@ use App\Http\Controllers\CodeDebuggerController;
 use App\Http\Controllers\SecurityAnalyzerController;
 use App\Http\Controllers\PerformanceOptimizerController;
 use App\Http\Controllers\DocumentationGeneratorController;
+use App\Http\Controllers\DomainValuationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AboutController;
 use App\Http\Middleware\TrackUsage;
@@ -63,3 +64,7 @@ Route::post('/tools/performance-optimize', [PerformanceOptimizerController::clas
 Route::post('/tools/generate-docs', [DocumentationGeneratorController::class, 'generate'])
     ->middleware(TrackUsage::class)
     ->name('tools.docs.generate');
+
+Route::post('/tools/domain-valuation', [DomainValuationController::class, 'analyze'])
+    ->middleware(TrackUsage::class)
+    ->name('tools.domain.valuation');

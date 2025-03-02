@@ -140,9 +140,9 @@
                         </div>
                         <h3 class="text-xl font-bold mb-2 bg-gradient-to-r from-indigo-500 to-pink-500 bg-clip-text text-transparent">Domain Valuation Tool</h3>
                         <p class="text-gray-600 mb-4">Get accurate valuations for domain names based on AI-powered market analysis.</p>
-                        <a href="#" class="btn btn-primary">
+                        <button onclick="openModal('domain-valuation')" class="btn btn-primary">
                             Evaluate Domain
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -156,5 +156,6 @@
 @include('partials.modals.security-analyzer')
 @include('partials.modals.performance-optimizer')
 @include('partials.modals.documentation-generator')
+@include('partials.modals.domain-valuation')
 
 @endsection

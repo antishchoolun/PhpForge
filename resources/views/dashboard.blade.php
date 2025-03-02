@@ -49,6 +49,11 @@
                             title="Documentation Generator"
                             description="Generate comprehensive documentation"
                         />
+                        <x-dashboard-card
+                            onClick="openModal('domain-valuation')"
+                            title="Domain Valuation"
+                            description="AI-powered domain name valuation"
+                        />
                     </div>
                 </div>
 
@@ -78,5 +83,6 @@
 @include('partials.modals.security-analyzer')
 @include('partials.modals.documentation-generator')
 @include('partials.modals.performance-optimizer')
+@include('partials.modals.domain-valuation')
 
 @endsection

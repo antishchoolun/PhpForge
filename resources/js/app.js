@@ -7,6 +7,7 @@ import { initCodeDebugger } from "./modules/codeDebugger";
 import { initSecurityAnalyzer } from "./modules/securityAnalyzer";
 import { initPerformanceOptimizer } from "./modules/performanceOptimizer";
 import { initDocumentationGenerator } from "./modules/documentationGenerator";
+import { initDomainValuation } from "./modules/domainValuation";
 import codeActions from "./modules/codeActions";
 import { setupCopyButtons } from "./modules/clipboard";
 import { showError } from "./modules/errorHandler";
@@ -32,4 +33,5 @@ document.addEventListener("DOMContentLoaded", () => {
     initPerformanceOptimizer();
     setupCopyButtons();
     initDocumentationGenerator();
+    initDomainValuation();
 });

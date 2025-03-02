@@ -67,7 +67,7 @@ class GroqApiClient
         }
     }
 
-    public function analyzeSecurity($code)
+    public function analyzeSecurity($prompt)
     {
         try {
             $response = Http::withHeaders($this->getHeaders())
@@ -75,11 +75,11 @@ class GroqApiClient
                     'messages' => [
                         [
                             'role' => 'system',
-                            'content' => 'You are a security analysis assistant. Analyze the provided code for security vulnerabilities and best practices.'
+                            'content' => 'You are a security analysis assistant. Analyze the code for security vulnerabilities and best practices.'
                         ],
                         [
                             'role' => 'user',
-                            'content' => "Please analyze this code for security issues:\n\n$code"
+                            'content' => $prompt
                         ]
                     ],
                     'model' => $this->model,
@@ -100,7 +100,7 @@ class GroqApiClient
         }
     }
 
-    public function debugCode($code)
+    public function debugCode($prompt)
     {
         try {
             $response = Http::withHeaders($this->getHeaders())
@@ -112,19 +112,7 @@ class GroqApiClient
                         ],
                         [
                             'role' => 'user',
-                            'content' => "Analyze the following code and provide results in JSON format:\n\n" . 
-                                "```php\n$code\n```\n\n" .
-                                "Return the analysis in this exact JSON structure:\n" .
-                                "[\n" .
-                                "  {\n" .
-                                "    \"severity\": \"error|warning|info|success\",\n" .
-                                "    \"title\": \"Issue title\",\n" .
-                                "    \"message\": \"Detailed explanation\",\n" .
-                                "    \"suggestion\": \"How to fix it (optional)\",\n" .
-                                "    \"code\": \"Example code snippet (optional)\"\n" .
-                                "  }\n" .
-                                "]\n\n" .
-                                "Return ONLY the JSON array, no additional text or explanations."
+                            'content' => $prompt
                         ]
                     ],
                     'model' => $this->model,
@@ -178,7 +166,7 @@ class GroqApiClient
         }
     }
 
-    public function generateDocumentation($code)
+    public function generateDocumentation($prompt)
     {
         try {
             $response = Http::withHeaders($this->getHeaders())
@@ -190,7 +178,7 @@ class GroqApiClient
                         ],
                         [
                             'role' => 'user',
-                            'content' => "Please generate documentation for this code:\n\n$code"
+                            'content' => $prompt
                         ]
                     ],
                     'model' => $this->model,
@@ -207,6 +195,39 @@ class GroqApiClient
             throw new \Exception('Documentation generation failed: ' . $response->body());
         } catch (\Exception $e) {
             Log::error('Documentation Generation Error: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function valuateDomain($prompt)
+    {
+        try {
+            $response = Http::withHeaders($this->getHeaders())
+                ->post($this->baseUrl, [
+                    'messages' => [
+                        [
+                            'role' => 'system',
+                            'content' => 'You are a domain valuation expert. Analyze domain names and provide detailed valuations based on market data and industry factors.'
+                        ],
+                        [
+                            'role' => 'user',
+                            'content' => $prompt
+                        ]
+                    ],
+                    'model' => $this->model,
+                    'temperature' => 0.4,
+                    'max_completion_tokens' => 1000
+                ]);
+
+            if ($response->successful()) {
+                return [
+                    'analysis' => $response->json()['choices'][0]['message']['content'] ?? ''
+                ];
+            }
+
+            throw new \Exception('Domain valuation failed: ' . $response->body());
+        } catch (\Exception $e) {
+            Log::error('Domain Valuation Error: ' . $e->getMessage());
             throw $e;
         }
     }
