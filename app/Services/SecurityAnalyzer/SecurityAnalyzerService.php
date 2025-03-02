@@ -14,7 +14,7 @@ class SecurityAnalyzerService
         $this->groqApi = $groqApi;
     }
 
-    public function analyzeSecurity(string $code, array $checks = [], string $riskLevel = 'medium')
+    public function analyzeSecurity(string $code, array $checks = [], string $risk_level = 'medium')
     {
         try {
             // Build analysis prompt with selected checks
@@ -27,7 +27,7 @@ class SecurityAnalyzerService
             $vulnerabilities = $this->parseSecurityResponse($result['analysis']);
             
             // Filter by risk level
-            $filteredVulnerabilities = $this->filterByRiskLevel($vulnerabilities, $riskLevel);
+            $filteredVulnerabilities = $this->filterByRiskLevel($vulnerabilities, $risk_level);
             
             // Calculate summary
             $summary = $this->calculateSummary($filteredVulnerabilities);
@@ -42,7 +42,7 @@ class SecurityAnalyzerService
             Log::error('Security analysis error: ' . $e->getMessage(), [
                 'code' => $code,
                 'checks' => $checks,
-                'risk_level' => $riskLevel
+                'risk_level' => $risk_level
             ]);
 
             return [
@@ -132,7 +132,7 @@ class SecurityAnalyzerService
         ]];
     }
 
-    protected function filterByRiskLevel(array $vulnerabilities, string $minLevel): array
+    protected function filterByRiskLevel(array $vulnerabilities, string $min_level): array
     {
         $levels = [
             'info' => 0,
@@ -141,7 +141,7 @@ class SecurityAnalyzerService
             'high' => 3
         ];
 
-        $minLevelValue = $levels[strtolower($minLevel)] ?? 0;
+        $minLevelValue = $levels[strtolower($min_level)] ?? 0;
 
         return array_filter($vulnerabilities, function($vuln) use ($levels, $minLevelValue) {
             $vulnLevel = $levels[strtolower($vuln['severity'])] ?? 0;

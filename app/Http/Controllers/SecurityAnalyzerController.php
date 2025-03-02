@@ -21,7 +21,7 @@ class SecurityAnalyzerController extends Controller
             'code' => 'required|string|min:1',
             'checks' => 'required|array',
             'checks.*' => 'string|in:sql_injection,xss,csrf,file_security,input_validation,authentication,session_security,encryption,dependency_check,api_security',
-            'riskLevel' => 'required|string|in:info,low,medium,high'
+            'risk_level' => 'required|string|in:info,low,medium,high'
         ]);
         
         if ($validator->fails()) {
@@ -34,7 +34,7 @@ class SecurityAnalyzerController extends Controller
         $result = $this->securityAnalyzer->analyzeSecurity(
             $request->input('code'),
             $request->input('checks', []),
-            $request->input('riskLevel')
+            $request->input('risk_level')
         );
         
         return response()->json($result);

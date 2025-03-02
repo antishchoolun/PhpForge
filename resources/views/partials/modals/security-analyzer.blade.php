@@ -23,7 +23,7 @@
             <div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
                 <!-- Left Side - Form -->
                 <div class="flex-1 overflow-y-auto custom-scrollbar bg-gray-50 dark:bg-gray-900 p-6">
-                    <form id="security-analyzer-form" class="max-w-2xl mx-auto space-y-8">
+                    <form id="security-analyzer-form" class="max-w-2xl mx-auto space-y-8" autocomplete="off" spellcheck="false">
                         <!-- Code Input -->
                         <div class="space-y-2">
                             <label for="code-input" class="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -35,7 +35,9 @@
                                     focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400 focus:border-transparent transition-shadow
                                     text-gray-900 dark:text-gray-100 font-mono"
                                     placeholder="// Paste your PHP code here for security analysis..."
-                                    required></textarea>
+                                    required
+                                    onkeydown="if(event.keyCode===9){var v=this.value,s=this.selectionStart,e=this.selectionEnd;this.value=v.substring(0, s)+'\t'+v.substring(e);this.selectionStart=this.selectionEnd=s+1;return false;}"
+                                    data-gramm_editor="false"></textarea>
                             </div>
                         </div>
 

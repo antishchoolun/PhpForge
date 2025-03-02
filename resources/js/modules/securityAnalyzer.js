@@ -14,12 +14,29 @@ export function initSecurityAnalyzer() {
     // Handle form submission
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
+        e.stopPropagation(); // Ensure no other handlers interfere
         
         // Get form data
-        const code = document.getElementById('code-input').value;
+        const formData = new FormData(form);
+        const code = formData.get('code') || '';
         const checks = Array.from(form.querySelectorAll('input[name="checks[]"]:checked'))
             .map(checkbox => checkbox.value);
-        const riskLevel = document.getElementById('risk-level').value;
+        const riskLevel = formData.get('risk_level') || 'medium';
+
+        // Client-side validation
+        if (!code.trim()) {
+            showError({
+                message: 'Please enter code to analyze'
+            });
+            return;
+        }
+
+        // Log data being sent (for debugging)
+        console.log('Submitting security analysis:', {
+            code: code.trim(),
+            checks,
+            riskLevel
+        });
         
         // Show quantum loader
         window.dispatchEvent(new CustomEvent('analyzing-security'));
@@ -38,9 +55,9 @@ export function initSecurityAnalyzer() {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                 },
                 body: JSON.stringify({
-                    code,
+                    code: code.trim(),
                     checks,
-                    riskLevel
+                    risk_level: riskLevel
                 })
             });
 
