@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CodeGeneratorController;
 use App\Http\Controllers\CodeDebuggerController;
+use App\Http\Controllers\SecurityAnalyzerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AboutController;
 use App\Http\Middleware\TrackUsage;
@@ -48,3 +49,7 @@ Route::post('/tools/generate', [CodeGeneratorController::class, 'generate'])
 Route::post('/tools/debug', [CodeDebuggerController::class, 'debug'])
     ->middleware(TrackUsage::class)
     ->name('tools.debug');
+
+Route::post('/tools/security-analyze', [SecurityAnalyzerController::class, 'analyze'])
+    ->middleware(TrackUsage::class)
+    ->name('tools.security.analyze');

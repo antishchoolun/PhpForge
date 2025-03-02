@@ -29,10 +29,15 @@
                             title="Code Generator"
                             description="Generate PHP code with AI assistance"
                         />
-                            <x-dashboard-card
+                        <x-dashboard-card
                             onClick="openModal('code-debugger')"
                             title="Code Debugger"
                             description="AI-powered code analysis and debugging"
+                        />
+                        <x-dashboard-card
+                            onClick="openModal('security-analyzer')"
+                            title="Security Analyzer"
+                            description="Scan code for security vulnerabilities"
                         />
                     </div>
                 </div>
@@ -60,5 +65,6 @@
 <!-- Include modals -->
 @include('partials.modals.code-generator')
 @include('partials.modals.code-debugger')
+@include('partials.modals.security-analyzer')
 
 @endsection

@@ -80,9 +80,9 @@
                         </div>
                         <h3 class="text-xl font-bold mb-2 bg-gradient-to-r from-indigo-500 to-pink-500 bg-clip-text text-transparent">Security Analysis Tool</h3>
                         <p class="text-gray-600 mb-4">Scan your PHP code for vulnerabilities and get actionable security recommendations.</p>
-                        <a href="#" class="btn btn-primary">
+                        <button onclick="openModal('security-analyzer')" class="btn btn-primary">
                             Scan Code
-                        </a>
+                        </button>
                     </div>
                 </div>
 
@@ -153,5 +153,6 @@
 <!-- Include modals -->
 @include('partials.modals.code-generator')
 @include('partials.modals.code-debugger')
+@include('partials.modals.security-analyzer')
 
 @endsection
