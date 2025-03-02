@@ -98,9 +98,9 @@
                         </div>
                         <h3 class="text-xl font-bold mb-2 bg-gradient-to-r from-indigo-500 to-pink-500 bg-clip-text text-transparent">Performance Optimization</h3>
                         <p class="text-gray-600 mb-4">Enhance your PHP code's performance with AI-generated optimization suggestions.</p>
-                        <a href="#" class="btn btn-primary">
+                        <button onclick="openModal('performance-optimizer')" class="btn btn-primary">
                             Optimize Code
-                        </a>
+                        </button>
                     </div>
                 </div>
 
@@ -154,5 +154,6 @@
 @include('partials.modals.code-generator')
 @include('partials.modals.code-debugger')
 @include('partials.modals.security-analyzer')
+@include('partials.modals.performance-optimizer')
 
 @endsection

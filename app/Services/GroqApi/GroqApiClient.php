@@ -145,7 +145,7 @@ class GroqApiClient
         }
     }
 
-    public function optimizePerformance($code)
+    public function optimizePerformance($prompt)
     {
         try {
             $response = Http::withHeaders($this->getHeaders())
@@ -153,11 +153,11 @@ class GroqApiClient
                     'messages' => [
                         [
                             'role' => 'system',
-                            'content' => 'You are a performance optimization assistant. Analyze the code for performance improvements.'
+                            'content' => 'You are a performance optimization assistant. Analyze the code for performance issues and optimization opportunities.'
                         ],
                         [
                             'role' => 'user',
-                            'content' => "Please analyze this code for performance optimization:\n\n$code"
+                            'content' => $prompt
                         ]
                     ],
                     'model' => $this->model,

@@ -39,6 +39,11 @@
                             title="Security Analyzer"
                             description="Scan code for security vulnerabilities"
                         />
+                        <x-dashboard-card
+                            onClick="openModal('performance-optimizer')"
+                            title="Performance Optimizer"
+                            description="Optimize code for better performance"
+                        />
                     </div>
                 </div>
 
@@ -66,5 +71,6 @@
 @include('partials.modals.code-generator')
 @include('partials.modals.code-debugger')
 @include('partials.modals.security-analyzer')
+@include('partials.modals.performance-optimizer')
 
 @endsection

@@ -5,6 +5,7 @@ import { initModals, openModal, closeModal } from "./modules/modals";
 import { initCodeGenerator } from "./modules/codeGenerator";
 import { initCodeDebugger } from "./modules/codeDebugger";
 import { initSecurityAnalyzer } from "./modules/securityAnalyzer";
+import { initPerformanceOptimizer } from "./modules/performanceOptimizer";
 import codeActions from "./modules/codeActions";
 import { setupCopyButtons } from "./modules/clipboard";
 import { showError } from "./modules/errorHandler";
@@ -27,5 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
     initCodeGenerator();
     initCodeDebugger();
     initSecurityAnalyzer();
+    initPerformanceOptimizer();
     setupCopyButtons();
 });
