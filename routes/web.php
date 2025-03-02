@@ -14,6 +14,7 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\DocumentationController;
 use App\Http\Controllers\PrivacyPolicyController;
+use App\Http\Controllers\TermsController;
 use App\Http\Middleware\TrackUsage;
 
 /*
@@ -42,6 +43,7 @@ Route::get('/pricing', function () {
 })->name('pricing');
 
 Route::get('/privacy-policy', [PrivacyPolicyController::class, 'index'])->name('privacy.policy');
+Route::get('/terms', [TermsController::class, 'index'])->name('terms');
 
 // Auth routes (provided by Laravel Breeze)
 require __DIR__.'/auth.php';

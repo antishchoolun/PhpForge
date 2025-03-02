@@ -155,7 +155,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="text-gray-600 hover:text-indigo-600 transition-colors flex items-center gap-2 group">
+                        <a href="{{ route('terms') }}" class="text-gray-600 hover:text-indigo-600 transition-colors flex items-center gap-2 group">
                             <svg class="w-4 h-4 text-indigo-500 group-hover:text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1.581.814l-4.419-3.35-4.419 3.35A1 1 0 014 16V4zm2-1a1 1 0 00-1 1v10.586l3.419-2.593a1 1 0 011.162 0L13 14.586V4a1 1 0 00-1-1H6z" clip-rule="evenodd"/>
                             </svg>
