@@ -20,6 +20,11 @@ class User extends Authenticatable
         'email',
         'password',
         'last_used_at',
+        'avatar',
+        'timezone',
+        'preferred_language',
+        'tool_preferences',
+        'api_requests_count'
     ];
 
     /**
@@ -41,5 +46,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'last_used_at' => 'datetime',
+        'tool_preferences' => 'json',
+        'api_requests_count' => 'integer',
     ];
 }
