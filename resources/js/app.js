@@ -3,6 +3,7 @@ import Alpine from "alpinejs";
 import "../css/app.css";
 import { initModals, openModal, closeModal } from "./modules/modals";
 import { initCodeGenerator } from "./modules/codeGenerator";
+import { initCodeDebugger } from "./modules/codeDebugger";
 import codeActions from "./modules/codeActions";
 import { setupCopyButtons } from "./modules/clipboard";
 import { showError } from "./modules/errorHandler";
@@ -23,5 +24,6 @@ Alpine.start();
 document.addEventListener("DOMContentLoaded", () => {
     initModals();
     initCodeGenerator();
+    initCodeDebugger();
     setupCopyButtons();
 });

@@ -62,9 +62,9 @@
                         </div>
                         <h3 class="text-xl font-bold mb-2 bg-gradient-to-r from-indigo-500 to-pink-500 bg-clip-text text-transparent">AI Debugging & Error Checking</h3>
                         <p class="text-gray-600 mb-4">Identify and fix bugs instantly with intelligent error analysis and solutions.</p>
-                        <a href="#" class="btn btn-primary">
+                        <button onclick="openModal('code-debugger')" class="btn btn-primary">
                             Debug Code
-                        </a>
+                        </button>
                     </div>
                 </div>
 
@@ -150,7 +150,8 @@
     </div>
 </div>
 
-<!-- Include modal -->
+<!-- Include modals -->
 @include('partials.modals.code-generator')
+@include('partials.modals.code-debugger')
 
 @endsection

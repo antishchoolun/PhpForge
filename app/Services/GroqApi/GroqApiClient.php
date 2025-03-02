@@ -108,11 +108,23 @@ class GroqApiClient
                     'messages' => [
                         [
                             'role' => 'system',
-                            'content' => 'You are a code debugging assistant. Analyze the code for potential bugs and improvements.'
+                            'content' => 'You are a code debugging assistant. Analyze the code and provide output in JSON format following the specified structure.'
                         ],
                         [
                             'role' => 'user',
-                            'content' => "Please debug this code and suggest improvements:\n\n$code"
+                            'content' => "Analyze the following code and provide results in JSON format:\n\n" . 
+                                "```php\n$code\n```\n\n" .
+                                "Return the analysis in this exact JSON structure:\n" .
+                                "[\n" .
+                                "  {\n" .
+                                "    \"severity\": \"error|warning|info|success\",\n" .
+                                "    \"title\": \"Issue title\",\n" .
+                                "    \"message\": \"Detailed explanation\",\n" .
+                                "    \"suggestion\": \"How to fix it (optional)\",\n" .
+                                "    \"code\": \"Example code snippet (optional)\"\n" .
+                                "  }\n" .
+                                "]\n\n" .
+                                "Return ONLY the JSON array, no additional text or explanations."
                         ]
                     ],
                     'model' => $this->model,
