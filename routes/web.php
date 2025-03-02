@@ -21,6 +21,7 @@ use App\Http\Controllers\StatusController;
 use App\Http\Controllers\ApiReferenceController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CareersController;
+use App\Http\Controllers\BlogController;
 use App\Http\Middleware\TrackUsage;
 
 /*
@@ -61,6 +62,9 @@ Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.
 
 Route::get('/careers', [CareersController::class, 'index'])->name('careers');
 Route::post('/careers/apply', [CareersController::class, 'apply'])->name('careers.apply');
+
+Route::get('/blog', [BlogController::class, 'index'])->name('blog');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
 // Auth routes (provided by Laravel Breeze)
 require __DIR__.'/auth.php';
