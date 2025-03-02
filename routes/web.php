@@ -12,6 +12,7 @@ use App\Http\Controllers\DomainValuationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\DocumentationController;
 use App\Http\Middleware\TrackUsage;
 
 /*
@@ -34,6 +35,7 @@ Route::get('/clear-cache', function () {
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 Route::get('/about', [AboutController::class, 'index'])->name('about');
+Route::get('/documentation', [DocumentationController::class, 'index'])->name('documentation');
 Route::get('/pricing', function () {
     return view('pricing');
 })->name('pricing');
