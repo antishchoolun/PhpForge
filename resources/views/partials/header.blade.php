@@ -11,7 +11,7 @@
                 <ul>
                     <li><a href="{{ route('home') }}">Tools</a></li>
                     <li><a href="{{ route('pricing') }}">Pricing</a></li>
-                    <li><a href="#">Documentation</a></li>
+                    <li><a href="{{ route('documentation') }}">Documentation</a></li>
                 </ul>
             </nav>
 
